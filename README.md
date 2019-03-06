@@ -1,2 +1,2 @@
-# CS160-ODFDS
+# CS160-ODFDS-Client
 On-Demand Food Delivery Service
