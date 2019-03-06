@@ -1,3 +1,6 @@
+CS160-ODFDS-Client
+On-Demand Food Delivery Service
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
