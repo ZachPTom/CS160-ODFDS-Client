@@ -4,8 +4,7 @@ const HelloTest = (props) => {
   console.log(props.data)
   return (
     <div>
-      <h1 style="text-align:center;font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;"><span 
-    >Successful Login!</span></h1>
+      <h1> Successful Login! </h1>
     </div>
   );
 }
