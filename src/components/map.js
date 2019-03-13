@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { Map, GoogleApiWrapper } from 'google-maps-react';
 
 const mapStyles = {
-  width: '100%',
-  height: '400px'
+  width: '600px',
+  height: '600px',
+  marginLeft: 'auto',
+    marginRight: 'auto'
 };
 
 export class MapContainer extends Component {
@@ -11,11 +13,12 @@ export class MapContainer extends Component {
     return (
       <Map
         google={this.props.google}
-        zoom={14}
+        zoom={18}
         style={mapStyles}
+        //coordinates of Macquarrie Hall
         initialCenter={{
-         lat: -1.2884,
-         lng: 36.8233
+         lat: 37.333443,
+         lng: -121.881639
         }}
       />
     );
