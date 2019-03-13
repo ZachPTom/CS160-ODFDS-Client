@@ -1,11 +1,25 @@
 import React from 'react';
+import Button from '@material-ui/core/Button';
+import CardActions from '@material-ui/core/CardActions';
+import { Link, Router, Route } from 'react-router-dom';
+import OrderHistory from "./orderHistory";
+import OnShift from "./onShift";
 
-const HelloTest = (props) => {
-  console.log(props.data)
+const HelloTest = () => {
   return (
-    <div>
-      Hello!
-    </div>
+  <React.Fragment>
+        <h1 align="center">Welcome Driver</h1>
+
+  <hr size="100px"/>
+  <CardActions style={{justifyContent: 'center'}}>
+    <Button component={Link} to="/orderHistory">
+      Order History
+    </Button>
+    <Button component={Link} to="/onShift">
+      Start Shift
+    </Button>
+    </CardActions>
+  </React.Fragment>
   );
 }
 

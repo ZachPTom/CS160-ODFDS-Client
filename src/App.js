@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from './store/actions/auth';
-import { BrowserRouter as Router } from 'react-router-dom';
-import '@material-ui/core/'
-
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import '@material-ui/core/';
 import BaseRouter from './routes'
 import ButtonAppBar from './containers/navbar'
 
