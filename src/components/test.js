@@ -4,6 +4,7 @@ import CardActions from '@material-ui/core/CardActions';
 import { Link, Router, Route } from 'react-router-dom';
 import OrderHistory from "./orderHistory";
 import OnShift from "./onShift";
+import Map from "./map";
 
 const HelloTest = () => {
   return (
@@ -17,6 +18,9 @@ const HelloTest = () => {
     </Button>
     <Button component={Link} to="/onShift">
       Start Shift
+    </Button>
+    <Button component={Link} to="/map">
+      Restaurant Location
     </Button>
     </CardActions>
   </React.Fragment>
