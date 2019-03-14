@@ -7,7 +7,7 @@ import Signup from './containers/signup';
 import HelloTest from './components/test';
 import OrderHistory from './components/orderHistory';
 import OnShift from './components/onShift';
-import Map from './components/map';
+import MapContainer from './components/map';
 import Welcome from './components/Welcome';
 
 
@@ -19,7 +19,7 @@ const BaseRouter = () => (
 		<Route exact path='/signup/' component={Signup}/>
 		<Route exact path="/orderHistory" component={OrderHistory}/>
 		<Route exact path="/onShift" component={OnShift}/>			
-		<Route exact path="/map" component={Map}/>						
+		<Route exact path="/map" component={MapContainer}/>						
 	</div>
 )
 
