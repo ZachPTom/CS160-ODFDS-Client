@@ -40,7 +40,7 @@ class ButtonAppBar extends React.Component {
             </Typography>
             {
               this.props.isAuthenticated ?
-              <Button color="inherit" onClick={this.props.logout}> Logout</Button>
+              <Button color="inherit" onClick={this.props.logout} component={Link} to="/login/"> Logout</Button>
               :
               <Button color="inherit" component={Link} to="/login/">Login</Button>
             }

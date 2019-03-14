@@ -8,11 +8,13 @@ import HelloTest from './components/test';
 import OrderHistory from './components/orderHistory';
 import OnShift from './components/onShift';
 import Map from './components/map';
+import Welcome from './components/Welcome';
 
 
 const BaseRouter = () => (
 	<div>
-		<Route exact path='/' component={TestBody}/>
+		<Route exact path='/' component={Welcome}/>
+		<Route exact path='/testbody/' component={TestBody}/>
 		<Route exact path='/login/' component={Login}/>
 		<Route exact path='/signup/' component={Signup}/>
 		<Route exact path="/orderHistory" component={OrderHistory}/>

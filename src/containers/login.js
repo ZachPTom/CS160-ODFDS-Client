@@ -74,7 +74,7 @@ class Login extends React.Component {
   	e.preventDefault();
   	console.log(this.state);
   	this.props.onAuth(this.state.username, this.state.password)
-  	this.props.history.push('/')
+  	this.props.history.push('/testbody/')
   }
 
   render () {
