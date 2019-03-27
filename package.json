@@ -10,13 +10,16 @@
     "google-map-react": "^1.1.2",
     "google-maps-react": "^2.0.2",
     "react": "^16.8.3",
+    "react-blur": "^0.6.0",
     "react-bootstrap": "^1.0.0-beta.5",
     "react-dom": "^16.8.3",
+    "react-native-blur": "^3.2.2",
     "react-redux": "^6.0.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "^2.1.8",
     "redux": "^4.0.1",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "typeface-roboto": "0.0.54"
   },
   "scripts": {
     "start": "PORT=8080 react-scripts start",
