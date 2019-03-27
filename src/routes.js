@@ -9,6 +9,7 @@ import OrderHistory from './components/orderHistory';
 import OnShift from './components/onShift';
 import MapContainer from './components/map';
 import Welcome from './components/Welcome';
+import AddressForm from './components/order_info';
 
 
 const BaseRouter = () => (
@@ -19,7 +20,8 @@ const BaseRouter = () => (
 		<Route exact path='/signup/' component={Signup}/>
 		<Route exact path="/orderHistory" component={OrderHistory}/>
 		<Route exact path="/onShift" component={OnShift}/>			
-		<Route exact path="/map" component={MapContainer}/>						
+		<Route exact path="/map" component={MapContainer}/>	
+		<Route exact path='/place_order/' component={AddressForm}/>					
 	</div>
 )
 
