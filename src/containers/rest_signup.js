@@ -11,10 +11,6 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormLabel from '@material-ui/core/FormLabel';
 
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -53,38 +49,35 @@ const styles = theme => ({
   },
 });
 
-class Login extends React.Component {
+class RestSignup extends React.Component {
 
   constructor() {
      super();
      this.state = {
-     	username: '',
-     	password: '',
-     	userType: '',
+     	email: '',
+     	password1: '',
+     	phone: '',
+     	restaurant_name: '',
+     	income: '',
+     	address: '',
+
      };
-     this.handleChangeUser = this.handleChangeUser.bind(this);
-     this.handleChangePassword = this.handleChangePassword.bind(this);
-     this.handleChangeUserType = this.handleChangeUserType.bind(this);
+     this.handleChange = this.handleChange.bind(this);
      this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChangeUser = (event) => {
-     this.setState({username: event.target.value});
-  }
-
-  handleChangePassword = (event) => {
-     this.setState({password: event.target.value});
-  }
-
-  handleChangeUserType = (event) => {
-     this.setState({userType: event.target.value});
+  handleChange = param => (event) => {
+     this.setState({
+      [param]: event.target.value
+     })
   }
 
   handleSubmit = (e) => {
   	e.preventDefault();
-  	//console.log(this.state);
-  	this.props.onAuth(this.state.username, this.state.password, this.state.userType)
-  	this.props.history.push('/testbody/')
+  	console.log(this.state);
+  	this.props.onAuth(this.state.email, this.state.password1,
+  		this.state.phone, this.state.restaurant_name, this.state.income, this.state.address)
+  	this.props.history.push('/')
   }
 
   render () {
@@ -116,40 +109,33 @@ class Login extends React.Component {
 			          <LockOutlinedIcon />
 			        </Avatar>
 			        <Typography component="h1" variant="h5">
-			          Login
+			          Restaurant Signup
 			        </Typography>
 			        <form className={classes.form} onSubmit={this.handleSubmit}>
 			          <FormControl margin="normal" required fullWidth>
-			            <InputLabel htmlFor="username">Email</InputLabel>
-			            <Input id="username" name="username" value={this.state.username} autoFocus onChange={this.handleChangeUser} />
+			            <InputLabel htmlFor="email">Email</InputLabel>
+			            <Input id="email" name="email" value={this.state.email} autoFocus onChange={this.handleChange('email')} />
 			          </FormControl>
 			          <FormControl margin="normal" required fullWidth>
-			            <InputLabel htmlFor="password">Password</InputLabel>
-			            <Input name="password" type="password" id="password" value={this.state.password} onChange={this.handleChangePassword} />
+			            <InputLabel htmlFor="password1">Password</InputLabel>
+			            <Input name="password1" type="password" id="password1" value={this.state.password1} onChange={this.handleChange('password1')} />
 			          </FormControl>
-			          <FormControl component="fieldset">
-			        <FormLabel component="legend">User Type</FormLabel>
-			        	<RadioGroup
-				          aria-label="position"
-				          name="userType"
-				          value={this.state.userType}
-				          onChange={this.handleChangeUserType}
-				          row
-				        >
-					         <FormControlLabel
-					            value="restaurant"
-					            control={<Radio color="primary" />}
-					            label="Restaurant"
-					            labelPlacement="start"
-					         />
-					         <FormControlLabel
-					            value="driver"
-					            control={<Radio color="primary" />}
-					            label="Driver"
-					            labelPlacement="start"
-					         />
-			        	</RadioGroup>
-			        </FormControl>
+			          <FormControl margin="normal" required fullWidth>
+			            <InputLabel htmlFor="phone">Phone</InputLabel>
+			            <Input id="phone" name="phone" value={this.state.phone} onChange={this.handleChange('phone')} />
+			          </FormControl>
+			          <FormControl margin="normal" required fullWidth>
+			            <InputLabel htmlFor="restaurant_name">Restaurant Name</InputLabel>
+			            <Input id="restaurant_name" name="restaurant_name" value={this.state.restaurant_name} onChange={this.handleChange('restaurant_name')} />
+			          </FormControl>
+			          <FormControl margin="normal" required fullWidth>
+			            <InputLabel htmlFor="income">Income</InputLabel>
+			            <Input id="income" name="income" value={this.state.income} onChange={this.handleChange('income')} />
+			          </FormControl>
+			          <FormControl margin="normal" required fullWidth>
+			            <InputLabel htmlFor="address">Address</InputLabel>
+			            <Input id="address" name="address" value={this.state.address} onChange={this.handleChange('address')} />
+			          </FormControl>
 			          <Button
 			            type="submit"
 			            fullWidth
@@ -157,27 +143,17 @@ class Login extends React.Component {
 			            color="primary"
 			            className={classes.submit}
 			          >
+			            Signup
+			          </Button>
+			          <Button
+			            fullWidth
+			            variant="contained"
+			            color="primary"
+			            className={classes.submit}
+			            component={Link}
+			            to='/login/'
+			          >
 			            Login
-			          </Button>
-			          <Button
-			            fullWidth
-			            variant="contained"
-			            color="primary"
-			            className={classes.submit}
-			            component={Link}
-			            to='/restaurant_signup/'
-			          >
-			            Restaurant Signup
-			          </Button>
-			          <Button
-			            fullWidth
-			            variant="contained"
-			            color="primary"
-			            className={classes.submit}
-			            component={Link}
-			            to='/driver_signup/'
-			          >
-			            Driver Signup
 			          </Button>
 			        </form>
 			      </Paper>
@@ -189,7 +165,7 @@ class Login extends React.Component {
   }
 }
 
-Login.propTypes = {
+RestSignup.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
@@ -202,11 +178,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchProps = dispatch => {
 	return {
-		onAuth: (username, password, userType) => dispatch(actions.authLogin(username, password, userType))
+		onAuth: (email, password1, phone, restaurant_name, income, address) => 
+		dispatch(actions.authSignupRest(email, password1, phone, restaurant_name, income, address))
 	}
 }
 
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchProps)(Login));
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchProps)(RestSignup));
 
 
 

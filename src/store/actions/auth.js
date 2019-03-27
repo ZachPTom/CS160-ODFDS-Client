@@ -37,16 +37,16 @@ export const checkAuthTimeout = expTime => {
 	}
 } 
 
-export const authLogin = (username, password) => {
+export const authLogin = (email, password, userType) => {
 	return dispatch => {
 		dispatch(authStart())
-		axios.post('http://127.0.0.1:8000/rest-auth/login/', {
-			username: username,
+		axios.post('http://127.0.0.1:8000/api/'+ userType +'/r/login/', {
+			email: email,
 			password: password
 		})
 		.then(res => {
 			const token = res.data.key;
-			console.log('Logged in!!', token)
+			console.log('Logged in!!', res)
 			const expDate = new Date(new Date().getTime() + 3600 * 1000)
 			window.localStorage.setItem('token', token);
 			window.localStorage.setItem('expDate', expDate);
@@ -59,14 +59,47 @@ export const authLogin = (username, password) => {
 	}
 } 
 
-export const authSignup = (username, email, password1, password2) => {
+export const authSignupRest = (email, password1, phone, restaurant_name, income, address) => {
 	return dispatch => {
 		dispatch(authStart())
-		axios.post('http://127.0.0.1:8000/rest-auth/registration/', {
-			username: username,
-			email: email,
-			password1: password1,
-			password2: password2
+		axios.post('http://127.0.0.1:8000/api/restaurant/', {
+			"email": email,
+			"password": password1,
+			"phone": phone,
+			"restaurant_name": restaurant_name,
+			"income": income,
+			"address": address,
+		})
+		.then(res => {
+			const token = res.data.key;
+			const expDate = new Date(new Date().getTime() + 3600 * 1000)
+			window.localStorage.setItem('token', token);
+			window.localStorage.setItem('expDate', expDate);
+			dispatch(authSuccess(token))
+			dispatch(checkAuthTimeout(3600));
+		})
+		.catch(error => {
+			dispatch(authFail(error));
+			console.log(error)
+		})
+	}
+} 
+
+export const authSignupDriver = (email, password1, phone, ssn, income, date_of_birth, first_name, last_name, car_plate, car_model, location, userType) => {
+	return dispatch => {
+		dispatch(authStart())
+		axios.post('http://127.0.0.1:8000/api/driver/', {
+			"email": email,
+			"password": password1,
+			"phone": phone,
+			"ssn": ssn,
+			"date_of_birth": date_of_birth,
+			"first_name": first_name,
+			"last_name": last_name,
+			"income": income,
+			"car_plate": car_plate,
+			"car_model": car_model,
+			"location": location
 		})
 		.then(res => {
 			const token = res.data.key;

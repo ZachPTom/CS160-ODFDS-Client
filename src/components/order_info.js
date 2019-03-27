@@ -15,6 +15,7 @@ class AddressForm extends React.Component {
       name: '',
       phone: '',
       food: '',
+      price:'',
       address1: ''
      };
      this.handleChange = this.handleChange.bind(this);
@@ -29,15 +30,34 @@ class AddressForm extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('http://127.0.0.1:8000/api/', {
-      costumer_name: this.state.name,
-      costumer_phone: this.state.phone,
-      costumer_address: this.state.address1,
-      food: this.state.food,      
-      //order_placed_date_time: 
-    })
-    .then(res => console.log(res))
-    .catch(error => console.log(error))
+    // hardcoded
+    axios.post('http://127.0.0.1:8000/api/restaurant/r/post/', {
+        rest_id: 22,
+        lat: '37.31738711',
+        long: '121.93631488',
+        price: this.state.price,
+        //driver_id: 3,
+        //order_placed_date_time: 
+      })
+      .then(res => console.log(res))
+      .catch(error => console.log(error))
+
+
+
+    /*axios.get('https://maps.googleapis.com/maps/api/geocode/json?address=' 
+      + this.state.address1 + '&key=AIzaSyDU_NdwIBxkUZGeaOqJWBgRpi_RhvjItic')
+    .then( res => //console.log(res))
+      axios.post('http://127.0.0.1:8000/api/restaurent/r/post/', {
+        rest_id: 22,
+        costumer_phone: this.state.phone,
+        costumer_address: this.state.address1,
+        food: this.state.food,      
+        //order_placed_date_time: 
+      })
+      .then(res => console.log(res))
+      .catch(error => console.log(error))
+    )
+    .catch(error => console.log(error))*/
     //this.props.onAuth(this.state.username, this.state.password)
     //this.props.history.push('/testbody/')
   }
@@ -77,6 +97,16 @@ class AddressForm extends React.Component {
             fullWidth
             onChange={this.handleChange('food')}
             autoComplete="food"
+          />
+          <TextField
+            required
+            id="price"
+            name="price"
+            label="Price"
+            value={this.state.price}
+            fullWidth
+            onChange={this.handleChange('price')}
+            autoComplete="price"
           />
           <TextField
             required

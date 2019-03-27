@@ -3,7 +3,8 @@ import { Route } from 'react-router-dom';
 
 import TestBody from './containers/testbody';
 import Login from './containers/login';
-import Signup from './containers/signup';
+import RestSignup from './containers/rest_signup';
+import DriverSignup from './containers/driver_signup';
 import HelloTest from './components/test';
 import OrderHistory from './components/orderHistory';
 import OnShift from './components/onShift';
@@ -17,7 +18,8 @@ const BaseRouter = () => (
 		<Route exact path='/' component={Welcome}/>
 		<Route exact path='/testbody/' component={TestBody}/>
 		<Route exact path='/login/' component={Login}/>
-		<Route exact path='/signup/' component={Signup}/>
+		<Route exact path='/restaurant_signup/' component={RestSignup}/>
+		<Route exact path='/driver_signup/' component={DriverSignup}/>
 		<Route exact path="/orderHistory" component={OrderHistory}/>
 		<Route exact path="/onShift" component={OnShift}/>			
 		<Route exact path="/map" component={MapContainer}/>	
