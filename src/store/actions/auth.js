@@ -83,6 +83,32 @@ export const authSignup = (username, email, password1, password2) => {
 	}
 } 
 
+export const authSignupRestaurant = (email, password, phone, restaurant_name, income, address) => {
+	return dispatch => {
+		dispatch(authStart())
+		axios.post('http://127.0.0.1:8000/api/restaurant/', {
+			email: email,
+			password: password,
+			phone: phone,
+			restaurant_name: restaurant_name,
+			income: income,
+			address: address
+		})
+		.then(res => {
+			const token = res.data.key;
+			const expDate = new Date(new Date().getTime() + 3600 * 1000)
+			window.localStorage.setItem('token', token);
+			window.localStorage.setItem('expDate', expDate);
+			dispatch(authSuccess(token))
+			dispatch(checkAuthTimeout(3600));
+		})
+		.catch(error => {
+			dispatch(authFail(error));
+			console.log(error)
+		})
+	}
+} 
+
 export const authCheckState = () => {
 	return dispatch => {
 		const token = window.localStorage.getItem('token');

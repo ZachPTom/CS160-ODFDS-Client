@@ -63,6 +63,9 @@ class ButtonAppBar extends React.Component {
                 Login
               </Button>
             )}
+            {
+              <Button color="inherit" component={Link} to="/signup-Restaurant/">Restaurant Signup</Button>
+            }
           </Toolbar>
         </AppBar>
         {this.props.children}
