@@ -1,52 +1,35 @@
 import React, { Component } from 'react';
-import { Map, GoogleApiWrapper, InfoWindow, Marker } from 'google-maps-react';
+import { GoogleApiWrapper, InfoWindow, Marker } from 'google-maps-react';
 
-const mapStyles = {
-  width: '600px',
-  height: '600px',
-  marginLeft: 'auto',
-    marginRight: 'auto'
-};
+import CurrentLocation from './currentLocation';
 
 export class MapContainer extends Component {
-    state = {
-        showingInfoWindow: false,  //Hides or the shows the infoWindow
-        activeMarker: {},          //Shows the active marker upon click
-        selectedPlace: {}          //Shows the infoWindow to the selected place upon a marker
-      };
+  state = {
+    showingInfoWindow: false,
+    activeMarker: {},
+    selectedPlace: {}
+  };
 
-      onMarkerClick = (props, marker, e) =>
+  onMarkerClick = (props, marker, e) =>
+    this.setState({
+      selectedPlace: props,
+      activeMarker: marker,
+      showingInfoWindow: true
+    });
+
+  onClose = props => {
+    if (this.state.showingInfoWindow) {
       this.setState({
-        selectedPlace: props,
-        activeMarker: marker,
-        showingInfoWindow: true
+        showingInfoWindow: false,
+        activeMarker: null
       });
-  
-    onClose = props => {
-      if (this.state.showingInfoWindow) {
-        this.setState({
-          showingInfoWindow: false,
-          activeMarker: null
-        });
-      }
-    };
+    }
+  };
 
-    render() {
+  render() {
     return (
-    <Map
-        google={this.props.google}
-        zoom={18}
-        style={mapStyles}
-        //coordinates of Macquarrie Hall
-        initialCenter={{
-         lat: 37.333443,
-         lng: -121.881639
-        }}
-    >
-      <Marker
-          onClick={this.onMarkerClick}
-          name={'Cookin up some cs geniuses'}
-        />
+      <CurrentLocation centerAroundCurrentLocation google={this.props.google}>
+        <Marker onClick={this.onMarkerClick} name={'current location'} />
         <InfoWindow
           marker={this.state.activeMarker}
           visible={this.state.showingInfoWindow}
@@ -56,7 +39,7 @@ export class MapContainer extends Component {
             <h4>{this.state.selectedPlace.name}</h4>
           </div>
         </InfoWindow>
-    </Map>
+      </CurrentLocation>
     );
   }
 }

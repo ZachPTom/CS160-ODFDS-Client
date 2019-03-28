@@ -9,6 +9,7 @@ import HelloTest from './components/test';
 import OrderHistory from './components/orderHistory';
 import OnShift from './components/onShift';
 import MapContainer from './components/map';
+import CurrentLocation from './components/currentLocation';
 import Welcome from './components/Welcome';
 import AddressForm from './components/order_info';
 
@@ -23,6 +24,7 @@ const BaseRouter = () => (
 		<Route exact path="/orderHistory" component={OrderHistory}/>
 		<Route exact path="/onShift" component={OnShift}/>			
 		<Route exact path="/map" component={MapContainer}/>	
+		<Route exact path="/currentLocation" component={CurrentLocation}/>	
 		<Route exact path='/place_order/' component={AddressForm}/>					
 	</div>
 )
