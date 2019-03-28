@@ -11,13 +11,13 @@ class App extends Component {
     this.props.onTryAutoSignup();
   }
 
+  //<ButtonAppBar {...this.props}>
+  //</ButtonAppBar>
   render() {
     return (
       <div>
         <Router>
-          <ButtonAppBar {...this.props}>
-            <BaseRouter />
-          </ButtonAppBar>
+          <BaseRouter />
         </Router>
       </div>
     );

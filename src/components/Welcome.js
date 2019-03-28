@@ -7,20 +7,19 @@ import "typeface-roboto";
 const imgfood = require("../breakfast.png");
 const divStyle = {
   width: "100%",
-  height: "775px",
+  height: "772px",
   backgroundImage: `url(${imgfood})`,
   backgroundSize: "cover",
-  marginTop: "-105px"
+  marginTop: "-45px"
 };
 const headerStyle = {
-  padding: "43px",
+  padding: "90px",
   color: "#FFFF99",
-  fontSize: "60px",
+  fontSize: "80px",
   fontWeight: "normal",
   fontFamily: "roboto"
 };
 const paraStyle = {
-  padding: "40px",
   color: "white",
   fontWeight: "normal",
   fontFamily: "roboto"
@@ -36,7 +35,7 @@ const buttonStyle = {
 class Welcome extends React.Component {
   render() {
     return (
-      <div className="cComponent" style={divStyle}>
+      <div className="welcomponent" style={divStyle}>
         <h1 align="center" style={headerStyle}>
           ODFDS
         </h1>
@@ -44,8 +43,8 @@ class Welcome extends React.Component {
           Welcome to a world of revolutionary food delivery. Reimagined, in a
           way that you have never seen before. Join us on this journey of
           getting delicious, mouth-watering food from your favorite restaurant,
-          to the tastebuds on people's tongues. Become a driver or add your
-          restaurant today!
+          to the tastebuds on people's tongues. <br />
+          Become a driver or add your restaurant today!
         </h2>
         <CardActions style={{ justifyContent: "center" }}>
           <Button
