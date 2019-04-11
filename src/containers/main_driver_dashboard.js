@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import HelloTest from '../components/driver_dashboard_body';
 
-class TestBody extends React.Component {
+class driver_dashboard extends React.Component {
 
 	state = {
 		driver: []
@@ -41,4 +41,4 @@ class TestBody extends React.Component {
 	  }
 }
 
-export default TestBody;
+export default driver_dashboard;

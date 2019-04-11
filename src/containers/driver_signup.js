@@ -15,6 +15,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as actions from '../store/actions/auth';
+import Axios from 'axios';
 
 
 const styles = theme => ({
@@ -52,19 +53,24 @@ const styles = theme => ({
 class DriverSignup extends React.Component {
 
   constructor() {
-     super();
+		 super();
      this.state = {
      	email: '',
      	password1: '',
      	phone: '',
-     	ssn: '',
+			 ssn: '',
+			 income: '',
      	date_of_birth: '',
      	first_name: '',
-		last_name: '',
-		income: '',
-		car_plate: '',
-		car_model: '',
-		location: '',
+			last_name: '',
+			car_plate: '',
+			car_model: '',
+			street_address: '',
+			city: '',
+			state: '',
+			zip_code: '',
+			lat: '',
+			lng: ''
      };
      this.handleChange = this.handleChange.bind(this);
      this.handleSubmit = this.handleSubmit.bind(this);
@@ -77,14 +83,34 @@ class DriverSignup extends React.Component {
   }
 
   handleSubmit = (e) => {
-  	e.preventDefault();
-  	console.log(this.state);
-  	this.props.onAuth(this.state.email, this.state.password1,
-  		this.state.phone, this.state.ssn, this.state.income, this.state.date_of_birth,
-  		this.state.first_name, this.state.last_name, this.state.car_plate, this.state.car_model,
-  		this.state.location)
-  	this.props.history.push('/')
-  }
+		e.preventDefault();
+		console.log(this.state);
+		var location = this.state.street_address + ' ' + this.state.city + ' ' + this.state.state
+		Axios.get('https://maps.googleapis.com/maps/api/geocode/json',{
+			params:{
+				address:location,
+				key:'AIzaSyCAp9svAAYxNF4P4BXO1-BVQ4lcMCHn09k'
+			}
+		})
+		.then(response => {
+			this.setState({
+				lat: response.data.results[0].geometry.location.lat
+			})
+			this.setState({
+				lng: response.data.results[0].geometry.location.lng
+			})
+			console.log(this.state.lat)
+			console.log(this.state.lng)
+			this.props.onAuth(this.state.email, this.state.password1,
+				this.state.phone, this.state.ssn, this.state.income, this.state.date_of_birth,
+				this.state.first_name, this.state.last_name, this.state.car_plate, this.state.car_model,
+				this.state.lat, this.state.lng)
+			this.props.history.push('/')
+		})
+		
+	}
+	
+	
 
   render () {
 	  
@@ -131,7 +157,7 @@ class DriverSignup extends React.Component {
 			            <Input id="first_name" name="first_name" value={this.state.first_name} onChange={this.handleChange('first_name')} />
 			          </FormControl>
 			          <FormControl margin="normal" required fullWidth>
-			            <InputLabel htmlFor="last_name">First Name</InputLabel>
+			            <InputLabel htmlFor="last_name">Last Name</InputLabel>
 			            <Input id="last_name" name="last_name" value={this.state.last_name} onChange={this.handleChange('last_name')} />
 			          </FormControl>
 			          <FormControl margin="normal" required fullWidth>
@@ -159,8 +185,20 @@ class DriverSignup extends React.Component {
 			            <Input id="car_model" name="car_model" value={this.state.car_model} onChange={this.handleChange('car_model')} />
 			          </FormControl>
 			          <FormControl margin="normal" required fullWidth>
-			            <InputLabel htmlFor="location">Location</InputLabel>
-			            <Input id="location" name="location" value={this.state.location} onChange={this.handleChange('location')} />
+			            <InputLabel htmlFor="street_address">Street Address</InputLabel>
+			            <Input id="street_address" name="street_address" value={this.state.street_address} onChange={this.handleChange('street_address')} />
+			          </FormControl>
+								<FormControl margin="normal" required fullWidth>
+			            <InputLabel htmlFor="city">City</InputLabel>
+			            <Input id="city" name="city" value={this.state.city} onChange={this.handleChange('city')} />
+			          </FormControl>
+								<FormControl margin="normal" required fullWidth>
+			            <InputLabel htmlFor="state">State</InputLabel>
+			            <Input id="state" name="state" value={this.state.state} onChange={this.handleChange('state')} />
+			          </FormControl>
+								<FormControl margin="normal" required fullWidth>
+			            <InputLabel htmlFor="zip_code">Zipcode</InputLabel>
+			            <Input id="zip_code" name="zip_code" value={this.state.zip_code} onChange={this.handleChange('zip_code')} />
 			          </FormControl>
 			          <Button
 			            type="submit"
@@ -204,8 +242,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchProps = dispatch => {
 	return {
-		onAuth: (email, password1, phone, ssn, income, date_of_birth, first_name, last_name, car_plate, car_model, location) => 
-		dispatch(actions.authSignupDriver(email, password1, phone, ssn, income, date_of_birth, first_name, last_name, car_plate, car_model, location))
+		onAuth: (email, password1, phone, ssn, income, date_of_birth, first_name, last_name, car_plate, car_model, lat, lng) => 
+		dispatch(actions.authSignupDriver(email, password1, phone, ssn, income, date_of_birth, first_name, last_name, car_plate, car_model, lat, lng))
 	}
 }
 
