@@ -56,9 +56,7 @@ class RestSignup extends React.Component {
      this.state = {
      	email: '',
      	password1: '',
-     	phone: '',
      	restaurant_name: '',
-     	income: '',
      	address: '',
 
      };
@@ -76,7 +74,7 @@ class RestSignup extends React.Component {
   	e.preventDefault();
   	console.log(this.state);
   	this.props.onAuth(this.state.email, this.state.password1,
-  		this.state.phone, this.state.restaurant_name, this.state.income, this.state.address)
+  		this.state.restaurant_name, this.state.address)
   	this.props.history.push('/')
   }
 
@@ -121,16 +119,8 @@ class RestSignup extends React.Component {
 			            <Input name="password1" type="password" id="password1" value={this.state.password1} onChange={this.handleChange('password1')} />
 			          </FormControl>
 			          <FormControl margin="normal" required fullWidth>
-			            <InputLabel htmlFor="phone">Phone</InputLabel>
-			            <Input id="phone" name="phone" value={this.state.phone} onChange={this.handleChange('phone')} />
-			          </FormControl>
-			          <FormControl margin="normal" required fullWidth>
 			            <InputLabel htmlFor="restaurant_name">Restaurant Name</InputLabel>
 			            <Input id="restaurant_name" name="restaurant_name" value={this.state.restaurant_name} onChange={this.handleChange('restaurant_name')} />
-			          </FormControl>
-			          <FormControl margin="normal" required fullWidth>
-			            <InputLabel htmlFor="income">Income</InputLabel>
-			            <Input id="income" name="income" value={this.state.income} onChange={this.handleChange('income')} />
 			          </FormControl>
 			          <FormControl margin="normal" required fullWidth>
 			            <InputLabel htmlFor="address">Address</InputLabel>
@@ -178,8 +168,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchProps = dispatch => {
 	return {
-		onAuth: (email, password1, phone, restaurant_name, income, address) => 
-		dispatch(actions.authSignupRest(email, password1, phone, restaurant_name, income, address))
+		onAuth: (email, password1, restaurant_name, address) => 
+		dispatch(actions.authSignupRest(email, password1, restaurant_name, address))
 	}
 }
 
