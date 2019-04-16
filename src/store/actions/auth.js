@@ -85,7 +85,7 @@ export const authSignupRest = (email, password1, restaurant_name, address) => {
 	}
 } 
 
-export const authSignupDriver = (email, password1, phone, ssn, income, date_of_birth, first_name, last_name, car_plate, car_model, location, userType) => {
+export const authSignupDriver = (email, password1, phone, ssn, income, date_of_birth, first_name, last_name, car_plate, car_model, lat, lng) => {
 	return dispatch => {
 		dispatch(authStart())
 		axios.post('http://127.0.0.1:8000/api/driver/', {
@@ -99,7 +99,8 @@ export const authSignupDriver = (email, password1, phone, ssn, income, date_of_b
 			"income": income,
 			"car_plate": car_plate,
 			"car_model": car_model,
-			"location": location
+			"driver_lat": lat,
+			"driver_long": lng
 		})
 		.then(res => {
 			const token = res.data.key;

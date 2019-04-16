@@ -2,12 +2,11 @@ import React from "react";
 import Button from "@material-ui/core/Button";
 import CardActions from "@material-ui/core/CardActions";
 import { Link } from "react-router-dom";
-import "typeface-roboto";
 
 const HelloTest = () => {
   return (
     <React.Fragment>
-      <h1 align="center" style={{ fontFamily: "roboto" }}>
+      <h1 align="center" style={{ fontFamily: "Arial" }}>
         Welcome Driver
       </h1>
 

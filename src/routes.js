@@ -6,7 +6,7 @@ import Login from './containers/login';
 import RestSignup from './containers/rest_signup';
 import RestDashboard from './containers/rest_dashboard';
 import DriverSignup from './containers/driver_signup';
-import HelloTest from './components/test';
+import HelloTest from './components/driver_dashboard_body';
 import OrderHistory from './components/orderHistory';
 import OnShift from './components/onShift';
 import MapContainer from './components/map';

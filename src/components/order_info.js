@@ -12,11 +12,10 @@ class AddressForm extends React.Component {
   constructor() {
      super();
      this.state = {
-      name: '',
-      phone: '',
-      food: '',
       price:'',
-      address1: ''
+      street_address: '',
+      city: '',
+      state:''
      };
      this.handleChange = this.handleChange.bind(this);
      this.handleSubmit = this.handleSubmit.bind(this);
@@ -27,19 +26,27 @@ class AddressForm extends React.Component {
       [param]: event.target.value
      })
   }
-
   handleSubmit = (e) => {
     e.preventDefault();
     // hardcoded
-    axios.post('http://127.0.0.1:8000/api/restaurant/r/post/', {
-        rest_id: 22,
-        lat: '37.31738711',
-        long: '121.93631488',
+    var location = this.state.street_address + ' ' + this.state.city + ' ' + this.state.state
+    axios.get('https://maps.googleapis.com/maps/api/geocode/json',{
+      params:{
+        address:location,
+        key:'AIzaSyCAp9svAAYxNF4P4BXO1-BVQ4lcMCHn09k'
+      }
+    }).then(res => {
+      axios.post('http://127.0.0.1:8000/api/restaurant/r/post/', {
+        lat: res.data.results[0].geometry.location.lat,
+        long: res.data.results[0].geometry.location.lng,
         price: this.state.price,
+        key: window.localStorage.getItem('token')
         //driver_id: 3,
         //order_placed_date_time: 
       })
       .then(res => console.log(res))
+      .catch(error => console.log(error))
+    })
       .catch(error => console.log(error))
 
 
@@ -70,36 +77,6 @@ class AddressForm extends React.Component {
       </Typography>
           <TextField
             required
-            id="name"
-            name="name"
-            label="Name"
-            value={this.state.name}
-            fullWidth
-            onChange={this.handleChange('name')}
-            autoComplete="fname"
-          />
-          <TextField
-            required
-            id="phone"
-            name="phone"
-            label="Phone"
-            value={this.state.phone}
-            fullWidth
-            onChange={this.handleChange('phone')}
-            autoComplete="phone"
-          />
-          <TextField
-            required
-            id="food"
-            name="food"
-            label="Food"
-            value={this.state.food}
-            fullWidth
-            onChange={this.handleChange('food')}
-            autoComplete="food"
-          />
-          <TextField
-            required
             id="price"
             name="price"
             label="Price"
@@ -110,13 +87,33 @@ class AddressForm extends React.Component {
           />
           <TextField
             required
-            id="address1"
-            name="address1"
-            label="Address line 1"
-            value={this.state.address1}
+            id="street_address"
+            name="street_address"
+            label="Street Adress"
+            value={this.state.street_address}
             fullWidth
-            onChange={this.handleChange('address1')}
-            autoComplete="billing address-line1"
+            onChange={this.handleChange('street_address')}
+            autoComplete="Street Adress"
+          />
+           <TextField
+            required
+            id="city"
+            name="city"
+            label="City"
+            value={this.state.city}
+            fullWidth
+            onChange={this.handleChange('city')}
+            autoComplete="City"
+          />
+           <TextField
+            required
+            id="state"
+            name="state"
+            label="State"
+            value={this.state.state}
+            fullWidth
+            onChange={this.handleChange('state')}
+            autoComplete="State"
           />
         <Button
                   type="submit"
