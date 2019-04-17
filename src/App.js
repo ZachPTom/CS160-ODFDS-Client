@@ -17,7 +17,9 @@ class App extends Component {
     return (
       <div>
         <Router>
-          <BaseRouter />
+          <ButtonAppBar {...this.props}>
+            <BaseRouter />
+          </ButtonAppBar>
         </Router>
       </div>
     );

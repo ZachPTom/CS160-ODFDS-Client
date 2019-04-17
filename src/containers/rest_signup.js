@@ -75,7 +75,7 @@ class RestSignup extends React.Component {
   }
 
   handleSubmit = (e) => {
-  	e.preventDefault();
+  		e.preventDefault();
 		console.log(this.state);
 		var location = this.state.street_address + ' ' + this.state.city + ' ' + this.state.state
 		Axios.get('https://maps.googleapis.com/maps/api/geocode/json',{
@@ -93,33 +93,44 @@ class RestSignup extends React.Component {
 			})
 			console.log(this.state.lat)
 			console.log(this.state.lng)
-  	this.props.onAuth(this.state.email, this.state.password1,
-  		this.state.restaurant_name, this.state.lat, this.state.lng)
-  	this.props.history.push('/')
+  			this.props.onAuth(this.state.email, this.state.password1,
+  				this.state.restaurant_name, this.state.lat, this.state.lng)
+  			.then( res =>{
+  					console.log('res here');
+  					console.log(res);
+			   		alert('Singup successful! You can login now')
+			   		this.props.history.push('/login')
+			}).catch(error => {
+				alert('Please enter correct infromation')
+				console.log(error)
+			})
+		}).catch(error => {
+			alert('Please enter correct infromation')
+			console.log('error here')
+			console.log(error)
 		})
 	}
 
   render () {
 	  
-	  let errorMessage = null;
+	  /*let errorMessage = null;
 	  if (this.props.error) {
 	  	errorMessage = (
 	  		<p>{this.props.error.message}</p>
 	  	)
-	  }
+	  }*/
 
 
 	  const { classes } = this.props;
 
 	  return (
 	  	<div>
-	  		{errorMessage}
 	  		{
-	  			this.props.loading ?
+	  			//this.props.loading ?
 
-	  			<CircularProgress className={classes.progress} />
+	  			//<CircularProgress className={classes.progress} />
 
-	  			:
+	  			//:
 
 			    <main className={classes.main}>
 			      <CssBaseline />
@@ -190,8 +201,8 @@ RestSignup.propTypes = {
 
 const mapStateToProps = (state) => {
 	return {
-		loading: state.loading,
-		error: state.error
+		//loading: state.loading,
+		//error: state.error
 	}
 }
 

@@ -83,31 +83,43 @@ class Login extends React.Component {
   handleSubmit = (e) => {
   	e.preventDefault();
   	//console.log(this.state);
-  	this.props.onAuth(this.state.username, this.state.password, this.state.userType)
-  	this.props.history.push('/rest_dashboard/')
+  	this.props.onAuth(this.state.username, this.state.password, 
+  		this.state.userType)
+  	.then(res => {
+  		if(this.state.userType === 'restaurant') {
+  			this.props.history.push('/rest_dashboard/')
+  		}
+  		else{
+  			this.props.history.push('/driver_dashboard/')
+  		}
+  	})
+  	.catch(error => {
+  		console.log(error)
+  		alert('Invalid Email or Password')
+  	})
+  
   }
 
   render () {
 	  
-	  let errorMessage = null;
+	  /*let errorMessage = null;
 	  if (this.props.error) {
 	  	errorMessage = (
 	  		<p>{this.props.error.message}</p>
 	  	)
-	  }
+	  }*/
 
 
 	  const { classes } = this.props;
 
 	  return (
 	  	<div>
-	  		{errorMessage}
 	  		{
-	  			this.props.loading ?
+	  			//this.props.loading ?
 
-	  			<CircularProgress className={classes.progress} />
+	  			//<CircularProgress className={classes.progress} />
 
-	  			:
+	  			//:
 
 			    <main className={classes.main}>
 			      <CssBaseline />
@@ -195,8 +207,8 @@ Login.propTypes = {
 
 const mapStateToProps = (state) => {
 	return {
-		loading: state.loading,
-		error: state.error
+		//loading: state.loading,
+		//error: state.error
 	}
 }
 

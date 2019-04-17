@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 
-import TestBody from './containers/testbody';
+import DriverDashboard from './containers/main_driver_dashboard';
 import Login from './containers/login';
 import RestSignup from './containers/rest_signup';
 import RestDashboard from './containers/rest_dashboard';
@@ -18,7 +18,7 @@ import AddressForm from './components/order_info';
 const BaseRouter = () => (
 	<div>
 		<Route exact path='/' component={Welcome}/>
-		<Route exact path='/testbody/' component={TestBody}/>
+		<Route exact path='/driver_dashboard/' component={DriverDashboard}/>
 		<Route exact path='/login/' component={Login}/>
 		<Route exact path='/restaurant_signup/' component={RestSignup}/>
 		<Route exact path='/rest_dashboard/' component={RestDashboard}/>

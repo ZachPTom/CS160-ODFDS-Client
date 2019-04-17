@@ -97,9 +97,20 @@ class DriverSignup extends React.Component {
 			this.props.onAuth(this.state.email, this.state.password1,
 				this.state.first_name, this.state.last_name,
 				this.state.lat, this.state.lng)
-			this.props.history.push('/')
+			.then( res =>{
+  					console.log('res here');
+  					console.log(res);
+			   		alert('Singup successful! You can login now')
+			   		this.props.history.push('/login')
+			}).catch(error => {
+				alert('Please enter correct infromation')
+				console.log(error)
+			})
+		}).catch(error => {
+			alert('Please enter correct infromation')
+			console.log('error here')
+			console.log(error)
 		})
-		
 	}
 	
 	
@@ -118,13 +129,12 @@ class DriverSignup extends React.Component {
 
 	  return (
 	  	<div>
-	  		{errorMessage}
 	  		{
-	  			this.props.loading ?
+	  			//this.props.loading ?
 
-	  			<CircularProgress className={classes.progress} />
+	  			//<CircularProgress className={classes.progress} />
 
-	  			:
+	  			//:
 
 			    <main className={classes.main}>
 			      <CssBaseline />
@@ -199,8 +209,8 @@ DriverSignup.propTypes = {
 
 const mapStateToProps = (state) => {
 	return {
-		loading: state.loading,
-		error: state.error
+		//loading: state.loading,
+		//error: state.error
 	}
 }
 
