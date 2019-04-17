@@ -15,6 +15,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as actions from '../store/actions/auth';
+import Axios from 'axios';
 
 
 const styles = theme => ({
@@ -57,8 +58,11 @@ class RestSignup extends React.Component {
      	email: '',
      	password1: '',
      	restaurant_name: '',
-     	address: '',
-
+			street: '',
+			city: '', 
+			state: '',
+			lat: '',
+			lng: ''
      };
      this.handleChange = this.handleChange.bind(this);
      this.handleSubmit = this.handleSubmit.bind(this);
@@ -72,11 +76,28 @@ class RestSignup extends React.Component {
 
   handleSubmit = (e) => {
   	e.preventDefault();
-  	console.log(this.state);
+		console.log(this.state);
+		var location = this.state.street_address + ' ' + this.state.city + ' ' + this.state.state
+		Axios.get('https://maps.googleapis.com/maps/api/geocode/json',{
+			params:{
+				address:location,
+				key:'AIzaSyCAp9svAAYxNF4P4BXO1-BVQ4lcMCHn09k'
+			}
+		})
+		.then(response => {
+			this.setState({
+				lat: response.data.results[0].geometry.location.lat
+			})
+			this.setState({
+				lng: response.data.results[0].geometry.location.lng
+			})
+			console.log(this.state.lat)
+			console.log(this.state.lng)
   	this.props.onAuth(this.state.email, this.state.password1,
-  		this.state.restaurant_name, this.state.address)
+  		this.state.restaurant_name, this.state.lat, this.state.lng)
   	this.props.history.push('/')
-  }
+		})
+	}
 
   render () {
 	  
@@ -123,8 +144,16 @@ class RestSignup extends React.Component {
 			            <Input id="restaurant_name" name="restaurant_name" value={this.state.restaurant_name} onChange={this.handleChange('restaurant_name')} />
 			          </FormControl>
 			          <FormControl margin="normal" required fullWidth>
-			            <InputLabel htmlFor="address">Address</InputLabel>
-			            <Input id="address" name="address" value={this.state.address} onChange={this.handleChange('address')} />
+			            <InputLabel htmlFor="address">Street</InputLabel>
+			            <Input id="address" name="address" value={this.state.address} onChange={this.handleChange('street')} />
+			          </FormControl>
+								<FormControl margin="normal" required fullWidth>
+			            <InputLabel htmlFor="address">City</InputLabel>
+			            <Input id="address" name="address" value={this.state.address} onChange={this.handleChange('city')} />
+			          </FormControl>
+								<FormControl margin="normal" required fullWidth>
+			            <InputLabel htmlFor="address">State</InputLabel>
+			            <Input id="address" name="address" value={this.state.address} onChange={this.handleChange('state')} />
 			          </FormControl>
 			          <Button
 			            type="submit"
@@ -168,8 +197,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchProps = dispatch => {
 	return {
-		onAuth: (email, password1, restaurant_name, address) => 
-		dispatch(actions.authSignupRest(email, password1, restaurant_name, address))
+		onAuth: (email, password1, restaurant_name, lat, lng) => 
+		dispatch(actions.authSignupRest(email, password1, restaurant_name, lat, lng))
 	}
 }
 

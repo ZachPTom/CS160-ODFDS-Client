@@ -69,4 +69,4 @@ const styles = StyleSheet.create({
   },
 });
 
-AppRegistry.registerComponent('RnDirectionsApp', () => RnDirectionsApp);
+export default Directions;

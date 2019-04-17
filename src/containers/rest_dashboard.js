@@ -9,7 +9,9 @@ class App extends React.Component {
     };
     getPosts() {
       axios
-        .get("http://127.0.0.1:8000/api/restaurant/r/dashboard")
+        .post("http://127.0.0.1:8000/api/restaurant/r/dashboard/", {
+          "key": window.localStorage.token
+        })
         //test with: https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/posts.json
         .then(response => {
             console.log(response.data)
@@ -24,7 +26,7 @@ class App extends React.Component {
       this.getPosts();
     }
     render() {
-      const { isLoading, posts } = this.state;
+      const { isLoading, restaurant } = this.state;
       return (
         <React.Fragment>
             <h1 align="center" style={{ fontFamily: "roboto" }}>

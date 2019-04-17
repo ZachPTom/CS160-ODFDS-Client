@@ -59,7 +59,7 @@ export const authLogin = (email, password, userType) => {
 	}
 } 
 
-export const authSignupRest = (email, password1, restaurant_name, address) => {
+export const authSignupRest = (email, password1, restaurant_name, lat, lng) => {
 	return dispatch => {
 		dispatch(authStart())
 		axios.post('http://127.0.0.1:8000/api/restaurant/', {
@@ -67,8 +67,8 @@ export const authSignupRest = (email, password1, restaurant_name, address) => {
 			"password": password1,
 			"restaurant_name": restaurant_name,
 			//"address": address,
-			"lat": 39.593555,
-			"long": -100.701737
+			"rest_lat": lat,
+			"rest_long": lng
 		})
 		.then(res => {
 			const token = res.data.key;
