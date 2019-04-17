@@ -85,20 +85,14 @@ export const authSignupRest = (email, password1, restaurant_name, lat, lng) => {
 	}
 } 
 
-export const authSignupDriver = (email, password1, phone, ssn, income, date_of_birth, first_name, last_name, car_plate, car_model, lat, lng) => {
+export const authSignupDriver = (email, password1, first_name, last_name, lat, lng) => {
 	return dispatch => {
 		dispatch(authStart())
 		axios.post('http://127.0.0.1:8000/api/driver/', {
 			"email": email,
 			"password": password1,
-			"phone": phone,
-			"ssn": ssn,
-			"date_of_birth": date_of_birth,
 			"first_name": first_name,
 			"last_name": last_name,
-			"income": income,
-			"car_plate": car_plate,
-			"car_model": car_model,
 			"driver_lat": lat,
 			"driver_long": lng
 		})

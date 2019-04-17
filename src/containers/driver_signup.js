@@ -57,20 +57,13 @@ class DriverSignup extends React.Component {
      this.state = {
      	email: '',
      	password1: '',
-     	phone: '',
-			 ssn: '',
-			 income: '',
-     	date_of_birth: '',
      	first_name: '',
-			last_name: '',
-			car_plate: '',
-			car_model: '',
-			street_address: '',
-			city: '',
-			state: '',
-			zip_code: '',
-			lat: '',
-			lng: ''
+		last_name: '',
+		street_address: '',
+		city: '',
+		state: '',
+		lat: '',
+		lng: ''
      };
      this.handleChange = this.handleChange.bind(this);
      this.handleSubmit = this.handleSubmit.bind(this);
@@ -102,8 +95,7 @@ class DriverSignup extends React.Component {
 			console.log(this.state.lat)
 			console.log(this.state.lng)
 			this.props.onAuth(this.state.email, this.state.password1,
-				this.state.phone, this.state.ssn, this.state.income, this.state.date_of_birth,
-				this.state.first_name, this.state.last_name, this.state.car_plate, this.state.car_model,
+				this.state.first_name, this.state.last_name,
 				this.state.lat, this.state.lng)
 			this.props.history.push('/')
 		})
@@ -160,31 +152,7 @@ class DriverSignup extends React.Component {
 			            <InputLabel htmlFor="last_name">Last Name</InputLabel>
 			            <Input id="last_name" name="last_name" value={this.state.last_name} onChange={this.handleChange('last_name')} />
 			          </FormControl>
-			          <FormControl margin="normal" required fullWidth>
-			            <InputLabel htmlFor="phone">Phone</InputLabel>
-			            <Input id="phone" name="phone" value={this.state.phone} onChange={this.handleChange('phone')} />
-			          </FormControl>
-			          <FormControl margin="normal" required fullWidth>
-			            <InputLabel htmlFor="income">Income</InputLabel>
-			            <Input id="income" name="income" value={this.state.income} onChange={this.handleChange('income')} />
-			          </FormControl>
-			          <FormControl margin="normal" required fullWidth>
-			            <InputLabel htmlFor="date_of_birth">Date of Birth</InputLabel>
-			            <Input id="date_of_birth" name="date_of_birth" value={this.state.date_of_birth} onChange={this.handleChange('date_of_birth')} />
-			          </FormControl>
-			          <FormControl margin="normal" required fullWidth>
-			            <InputLabel htmlFor="ssn">SSN</InputLabel>
-			            <Input id="ssn" name="ssn" value={this.state.ssn} onChange={this.handleChange('ssn')} />
-			          </FormControl>
-			          <FormControl margin="normal" required fullWidth>
-			            <InputLabel htmlFor="car_plate">Car Plate</InputLabel>
-			            <Input id="car_plate" name="car_plate" value={this.state.car_plate} onChange={this.handleChange('car_plate')} />
-			          </FormControl>
-			          <FormControl margin="normal" required fullWidth>
-			            <InputLabel htmlFor="car_model">Car Model</InputLabel>
-			            <Input id="car_model" name="car_model" value={this.state.car_model} onChange={this.handleChange('car_model')} />
-			          </FormControl>
-			          <FormControl margin="normal" required fullWidth>
+						<FormControl margin="normal" required fullWidth>
 			            <InputLabel htmlFor="street_address">Street Address</InputLabel>
 			            <Input id="street_address" name="street_address" value={this.state.street_address} onChange={this.handleChange('street_address')} />
 			          </FormControl>
@@ -195,11 +163,7 @@ class DriverSignup extends React.Component {
 								<FormControl margin="normal" required fullWidth>
 			            <InputLabel htmlFor="state">State</InputLabel>
 			            <Input id="state" name="state" value={this.state.state} onChange={this.handleChange('state')} />
-			          </FormControl>
-								<FormControl margin="normal" required fullWidth>
-			            <InputLabel htmlFor="zip_code">Zipcode</InputLabel>
-			            <Input id="zip_code" name="zip_code" value={this.state.zip_code} onChange={this.handleChange('zip_code')} />
-			          </FormControl>
+			          </FormControl>							
 			          <Button
 			            type="submit"
 			            fullWidth
@@ -242,8 +206,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchProps = dispatch => {
 	return {
-		onAuth: (email, password1, phone, ssn, income, date_of_birth, first_name, last_name, car_plate, car_model, lat, lng) => 
-		dispatch(actions.authSignupDriver(email, password1, phone, ssn, income, date_of_birth, first_name, last_name, car_plate, car_model, lat, lng))
+		onAuth: (email, password1, first_name, last_name, lat, lng) => 
+		dispatch(actions.authSignupDriver(email, password1, first_name, last_name, lat, lng))
 	}
 }
 
