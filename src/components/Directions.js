@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { GoogleApiWrapper, InfoWindow, Marker } from 'google-maps-react';
+import {Map, GoogleApiWrapper} from 'google-maps-react';
 
 import Polyline from '@mapbox/polyline';
 
-export default class Directions extends Component {
+export class Directions extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -14,7 +14,8 @@ export default class Directions extends Component {
   componentDidMount() {
     // find your origin and destination point coordinates and pass it to our method.
     // I am using Bursa,TR -> Istanbul,TR for this example
-    this.getDirections("40.1884979, 29.061018", "41.0082,28.9784")
+    this.getDirections("40.1884979, 29.061018", "41.0082, 28.9784")
+    this.map = this.props.maps.Map;
   }
 
   async getDirections(startLoc, destinationLoc) {
@@ -38,35 +39,32 @@ export default class Directions extends Component {
 
   render() {
     return (
-      <View>
-        <MapView style={styles.map} initialRegion={{
-          latitude:41.0082, 
-          longitude:28.9784, 
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421
-        }}>
-
-        <MapView.Polyline 
-            coordinates={this.state.coords}
-            strokeWidth={2}
-            strokeColor="red"/>
-
-        </MapView>
-      </View>
+      <Map google={this.props.google}
+        style={{width: '100%', height: '100%', position: 'relative'}}
+        className={'map'}
+        zoom={14}>
+        <Polyline
+          path={this.state.coords}
+          strokeColor="#0000FF"
+          strokeOpacity={0.8}
+          strokeWeight={2} />
+      </Map>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  map: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height
-  },
-});
+// const styles = StyleSheet.create({
+//   map: {
+//     position: 'absolute',
+//     top: 0,
+//     left: 0,
+//     right: 0,
+//     bottom: 0,
+//     width: Dimensions.get('window').width,
+//     height: Dimensions.get('window').height
+//   },
+// });
 
-export default Directions;
+export default GoogleApiWrapper({
+  apiKey: 'AIzaSyDU_NdwIBxkUZGeaOqJWBgRpi_RhvjItic'
+})(Directions);

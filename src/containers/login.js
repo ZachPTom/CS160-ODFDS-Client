@@ -84,7 +84,8 @@ class Login extends React.Component {
   	e.preventDefault();
   	//console.log(this.state);
   	this.props.onAuth(this.state.username, this.state.password, this.state.userType)
-  	this.props.history.push('/rest_dashboard/')
+		if (this.state.userType == 'restaurant') this.props.history.push('/rest_dashboard/')
+		else this.props.history.push('/main_driver_dashboard/')
   }
 
   render () {

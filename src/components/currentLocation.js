@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Polyline from '@mapbox/polyline';
 
 const mapStyles = {
   map: {
@@ -17,7 +18,8 @@ export class CurrentLocation extends React.Component {
       currentLocation: {
         lat: lat,
         lng: lng
-      }
+      }, 
+      coords: []
     };
   }
   componentDidMount() {
@@ -34,7 +36,28 @@ export class CurrentLocation extends React.Component {
         });
       }
     }
+    this.getDirections("37.333911,-121.881848", "37.333024, -121.884756");
     this.loadMap();
+  }
+
+  async getDirections(startLoc, destinationLoc) {
+    try {
+        let resp = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${ startLoc }&destination=${ destinationLoc }`, 
+          {mode: "no-cors"})
+        let respJson = await resp.json();
+        let points = Polyline.decode(respJson.routes[0].overview_polyline.points);
+        let coords = points.map((point, index) => {
+            return  {
+                latitude : point[0],
+                longitude : point[1]
+            }
+        })
+        this.setState({coords: coords})
+        return coords
+    } catch(error) {
+        //alert(error)
+        return error
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -60,11 +83,13 @@ export class CurrentLocation extends React.Component {
       let { zoom } = this.props;
       const { lat, lng } = this.state.currentLocation;
       const center = new maps.LatLng(lat, lng);
+      const poly = new maps.Polyline(this.state.coords)
       const mapConfig = Object.assign(
         {},
         {
           center: center,
-          zoom: zoom
+          zoom: zoom,
+          polyline: poly
         }
       );
       // maps.Map() is constructor that instantiates the map
@@ -95,7 +120,7 @@ export class CurrentLocation extends React.Component {
       return React.cloneElement(c, {
         map: this.map,
         google: this.props.google,
-        mapCenter: this.state.currentLocation
+        mapCenter: this.state.currentLocation,
       });
     });
   }
@@ -116,7 +141,7 @@ export class CurrentLocation extends React.Component {
 export default CurrentLocation;
 
 CurrentLocation.defaultProps = {
-  zoom: 10,
+  zoom: 6,
   initialCenter: {
     lat: 39.593555,
     lng: -100.701737

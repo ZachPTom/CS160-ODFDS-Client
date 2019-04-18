@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { GoogleApiWrapper, InfoWindow, Marker } from 'google-maps-react';
 
 import CurrentLocation from './currentLocation';
+import Polyline from '@mapbox/polyline';
 
 export class MapContainer extends Component {
   state = {
@@ -39,7 +40,12 @@ export class MapContainer extends Component {
             <h4>{this.state.selectedPlace.name}</h4>
           </div>
         </InfoWindow>
-      </CurrentLocation>
+        <Polyline
+        path={CurrentLocation.state.coords}
+        strokeColor="#0000FF"
+        strokeOpacity={0.8}
+        strokeWeight={2} /> 
+        </CurrentLocation>
     );
   }
 }

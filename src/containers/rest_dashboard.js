@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 import CardActions from "@material-ui/core/CardActions";
+import Button from "@material-ui/core/Button";
+import { Link } from "react-router-dom";
 
 class App extends React.Component {
     state = {
@@ -43,6 +45,15 @@ class App extends React.Component {
                   <div> 
                     <p>{"name: " + this.state.restaurant.restaurant_name}</p>
                     <p>{"email: " + this.state.restaurant.email}</p>
+                    <p>{"latitude and longitude: " + this.state.restaurant.address}</p>
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      component={Link}
+                      to="/map2"
+                    >
+                      Directions
+                    </Button>
                     <hr />
                   </div>
             //     );

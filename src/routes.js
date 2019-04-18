@@ -10,9 +10,11 @@ import HelloTest from './components/driver_dashboard_body';
 import OrderHistory from './components/orderHistory';
 import OnShift from './components/onShift';
 import MapContainer from './components/map';
+import MapContainer2 from './components/map2';
 import CurrentLocation from './components/currentLocation';
 import Welcome from './components/Welcome';
 import AddressForm from './components/order_info';
+import Directions from './components/Directions'
 
 
 const BaseRouter = () => (
@@ -26,8 +28,11 @@ const BaseRouter = () => (
 		<Route exact path="/orderHistory" component={OrderHistory}/>
 		<Route exact path="/onShift" component={OnShift}/>			
 		<Route exact path="/map" component={MapContainer}/>	
+		<Route exact path="/map2" component={MapContainer2}/>	
 		<Route exact path="/currentLocation" component={CurrentLocation}/>	
 		<Route exact path='/place_order/' component={AddressForm}/>					
+		<Route exact path='/Directions/' component={Directions}/>					
+
 	</div>
 )
 
