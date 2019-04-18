@@ -34,7 +34,7 @@ class AddressForm extends React.Component {
       var userTokenArr = this.state.userToken.split(':');
       var userType = userTokenArr[0];
       var token = userTokenArr[1];
-      // hardcoded
+      console.log(userTokenArr)
       var location = this.state.street_address + ' ' + this.state.city + ' ' + this.state.state
       axios.get('https://maps.googleapis.com/maps/api/geocode/json',{
         params:{
@@ -47,8 +47,6 @@ class AddressForm extends React.Component {
           long: res.data.results[0].geometry.location.lng,
           price: this.state.price,
           key: token
-          //driver_id: 3,
-          //order_placed_date_time: 
         })
         .then(res => {
           console.log(res)

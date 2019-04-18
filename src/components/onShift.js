@@ -26,12 +26,12 @@ class orderBody extends React.Component{
 	constructor() {
 	     super();
 	     this.state = {
-	     	selected: '',
-	     	selected2: '',
-	     	secondOrderList: [],
-	     	firstState: true,
-	     	secondState: false,
-	     	finalState: false,
+	     	selected: window.localStorage.getItem('firstOrder') || '',
+	     	selected2: window.localStorage.getItem('secondOrder') || '',
+	     	secondOrderList: window.localStorage.getItem('secondOrderList') || [],
+	     	firstState: window.localStorage.getItem('firstState') || true,
+	     	secondState: window.localStorage.getItem('secondState') || false,
+	     	finalState: window.localStorage.getItem('finalState') || false,
 	     	orders: [],
 			userToken: window.localStorage.getItem('token')
 	     };
@@ -52,7 +52,7 @@ class orderBody extends React.Component{
   	}
 
 	componentDidMount() {
-		if(this.state.userToken) {
+		if(this.state.userToken && this.state.firstState) {
 	        var userTokenArr = this.state.userToken.split(':');
 	        var userType = userTokenArr[0];
 	        var token = userTokenArr[1];
@@ -84,12 +84,18 @@ class orderBody extends React.Component{
 		         })
 				.then(res => {
 					this.setState({firstState: false});
+					window.localStorage.setItem('firstState', false);
 					console.log(res)
+					window.localStorage.setItem('firstOrder', this.state.selected);
 					if(res.data.length !== 0) {
 						this.state.secondOrderList = res.data;
+						window.localStorage.setItem('secondState', true);
+						window.localStorage.setItem('secondOrderList', res.data);
 						this.setState({secondState: true});
+						this.setState({secondOrderList: res.data});
 					} else {
 						this.setState({finalState: true});
+						window.localStorage.setItem('finalState', true);
 					}
 				})
 				.catch(error => console.log(error));
@@ -114,6 +120,9 @@ class orderBody extends React.Component{
 		         })
 				.then(res => {
 					console.log(res)
+					window.localStorage.setItem('secondOrder', this.state.selected2);
+					window.localStorage.setItem('secondState', false);
+					window.localStorage.setItem('finalState', true);
 					this.setState({secondState: false});
 					this.setState({finalState: true});
 				})
@@ -133,16 +142,29 @@ class orderBody extends React.Component{
 		        var userType = userTokenArr[0];
 		        var token = userTokenArr[1];
 		        console.log(userType);
-				axios.post('http://127.0.0.1:8000/api/driver/r/confirmation/', {
+		        var order_ids = []
+		        if(this.state.selected) {
+		        	order_ids.push(this.state.selected)
+		        }
+		        if(this.state.selected2) {
+		        	order_ids.push(this.state.selected2)
+		        }
+		        if (order_ids.lenght !== 0) {
+		        	axios.post('http://127.0.0.1:8000/api/driver/r/confirmation/', {
 		            key: token,
-		            order_id: this.state.selected
-		         })
-				.then(res => {
-					console.log(res)
-					this.setState({finalState: false});
-				})
-				.catch(error => console.log(error));
-			}
+		            order_id: order_ids
+			         })
+					.then(res => {
+						console.log(res)
+						window.localStorage.setItem('finalState', false);
+						window.localStorage.setItem('firstState', true);
+						this.setState({finalState: false});
+						this.setState({firstState: true});
+						this.props.history.push('/driver_dashboard')
+					})
+					.catch(error => console.log(error));
+					}
+		        }
 		}
 	}
 
