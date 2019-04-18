@@ -84,72 +84,77 @@ class Login extends React.Component {
 
     const { classes } = this.props;
 
-	  const { classes } = this.props;
-
-	  return (
-	  	<div>
-	  		{errorMessage}
-	  		{
-	  			this.props.loading ?
-
-	  			<CircularProgress className={classes.progress} />
-
-	  			:
-
-			    <main className={classes.main}>
-			      <CssBaseline />
-			      <Paper className={classes.paper}>
-			        <Avatar className={classes.avatar}>
-			          <LockOutlinedIcon />
-			        </Avatar>
-			        <Typography component="h1" variant="h5">
-			          Login
-			        </Typography>
-			        <form className={classes.form} onSubmit={this.handleSubmit}>
-			          <FormControl margin="normal" required fullWidth>
-			            <InputLabel htmlFor="username">Username</InputLabel>
-			            <Input id="username" name="username" value={this.state.username} autoFocus onChange={this.handleChangeUser} />
-			          </FormControl>
-			          <FormControl margin="normal" required fullWidth>
-			            <InputLabel htmlFor="password">Password</InputLabel>
-			            <Input name="password" type="password" id="password" value={this.state.password} onChange={this.handleChangePassword} />
-			          </FormControl>
-			          <Button
-			            type="submit"
-			            fullWidth
-			            variant="contained"
-			            color="primary"
-			            className={classes.submit}
-			          >
-			            Login
-			          </Button>
-			          <Button
-			            fullWidth
-			            variant="contained"
-			            color="primary"
-			            className={classes.submit}
-			            component={Link}
-			            to='/signup/'
-			          >
-			            Signup Driver
-			          </Button>
-								<Button
-			            fullWidth
-			            variant="contained"
-			            color="primary"
-			            className={classes.submit}
-			            component={Link}
-			            to='/signup-Restaurant/'
-			          >
-			            Signup Restaurant
-			          </Button>
-			        </form>
-			      </Paper>
-			    </main>
-		   	}
-		</div>
-	  );
-
+    return (
+      <div>
+        {errorMessage}
+        {this.props.loading ? (
+          <CircularProgress className={classes.progress} />
+        ) : (
+          <main className={classes.main}>
+            <CssBaseline />
+            <Paper className={classes.paper}>
+              <Avatar className={classes.avatar}>
+                <LockOutlinedIcon />
+              </Avatar>
+              <Typography component="h1" variant="h5">
+                Login
+              </Typography>
+              <form className={classes.form} onSubmit={this.handleSubmit}>
+                <FormControl margin="normal" required fullWidth>
+                  <InputLabel htmlFor="username">Username</InputLabel>
+                  <Input
+                    id="username"
+                    name="username"
+                    value={this.state.username}
+                    autoFocus
+                    onChange={this.handleChangeUser}
+                  />
+                </FormControl>
+                <FormControl margin="normal" required fullWidth>
+                  <InputLabel htmlFor="password">Password</InputLabel>
+                  <Input
+                    name="password"
+                    type="password"
+                    id="password"
+                    value={this.state.password}
+                    onChange={this.handleChangePassword}
+                  />
+                </FormControl>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}
+                >
+                  Login
+                </Button>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}
+                  component={Link}
+                  to="/signup/"
+                >
+                  Signup Driver
+                </Button>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}
+                  component={Link}
+                  to="/signup-Restaurant/"
+                >
+                  Signup Restaurant
+                </Button>
+              </form>
+            </Paper>
+          </main>
+        )}
+      </div>
+    );
   }
 }
 
