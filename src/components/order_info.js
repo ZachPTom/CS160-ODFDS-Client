@@ -9,13 +9,15 @@ import axios from 'axios'
 
 class AddressForm extends React.Component {
 
+
   constructor() {
      super();
      this.state = {
       price:'',
       street_address: '',
       city: '',
-      state:''
+      state:'',
+      userToken: window.localStorage.getItem('token')
      };
      this.handleChange = this.handleChange.bind(this);
      this.handleSubmit = this.handleSubmit.bind(this);
@@ -27,46 +29,34 @@ class AddressForm extends React.Component {
      })
   }
   handleSubmit = (e) => {
-    e.preventDefault();
-    // hardcoded
-    var location = this.state.street_address + ' ' + this.state.city + ' ' + this.state.state
-    axios.get('https://maps.googleapis.com/maps/api/geocode/json',{
-      params:{
-        address:location,
-        key:'AIzaSyCAp9svAAYxNF4P4BXO1-BVQ4lcMCHn09k'
-      }
-    }).then(res => {
-      axios.post('http://127.0.0.1:8000/api/restaurant/r/post/', {
-        lat: res.data.results[0].geometry.location.lat,
-        long: res.data.results[0].geometry.location.lng,
-        price: this.state.price,
-        key: window.localStorage.getItem('token')
-        //driver_id: 3,
-        //order_placed_date_time: 
+    if(this.state.userToken) {
+      e.preventDefault();
+      var userTokenArr = this.state.userToken.split(':');
+      var userType = userTokenArr[0];
+      var token = userTokenArr[1];
+      console.log(userTokenArr)
+      var location = this.state.street_address + ' ' + this.state.city + ' ' + this.state.state
+      axios.get('https://maps.googleapis.com/maps/api/geocode/json',{
+        params:{
+          address:location,
+          key:'AIzaSyCAp9svAAYxNF4P4BXO1-BVQ4lcMCHn09k'
+        }
+      }).then(res => {
+        axios.post('http://127.0.0.1:8000/api/restaurant/r/post/', {
+          lat: res.data.results[0].geometry.location.lat,
+          long: res.data.results[0].geometry.location.lng,
+          price: this.state.price,
+          key: token
+        })
+        .then(res => {
+          console.log(res)
+          this.props.history.push('/rest_dashboard')
+          alert("Order Posted")
+        })
+        .catch(error => console.log(error))
       })
-      .then(res => console.log(res))
-      .catch(error => console.log(error))
-    })
-      .catch(error => console.log(error))
-
-
-
-    /*axios.get('https://maps.googleapis.com/maps/api/geocode/json?address=' 
-      + this.state.address1 + '&key=AIzaSyDU_NdwIBxkUZGeaOqJWBgRpi_RhvjItic')
-    .then( res => //console.log(res))
-      axios.post('http://127.0.0.1:8000/api/restaurent/r/post/', {
-        rest_id: 22,
-        costumer_phone: this.state.phone,
-        costumer_address: this.state.address1,
-        food: this.state.food,      
-        //order_placed_date_time: 
-      })
-      .then(res => console.log(res))
-      .catch(error => console.log(error))
-    )
-    .catch(error => console.log(error))*/
-    //this.props.onAuth(this.state.username, this.state.password)
-    //this.props.history.push('/testbody/')
+        .catch(error => console.log(error))
+    }
   }
 
   render () {
