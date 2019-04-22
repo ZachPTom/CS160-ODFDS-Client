@@ -83,13 +83,13 @@ export class CurrentLocation extends React.Component {
       let { zoom } = this.props;
       const { lat, lng } = this.state.currentLocation;
       const center = new maps.LatLng(lat, lng);
-      const poly = new maps.Polyline(this.state.coords)
+      //const poly = new maps.Polyline(this.state.coords)
       const mapConfig = Object.assign(
         {},
         {
           center: center,
-          zoom: zoom,
-          polyline: poly
+          zoom: zoom
+          //polyline: poly
         }
       );
       // maps.Map() is constructor that instantiates the map

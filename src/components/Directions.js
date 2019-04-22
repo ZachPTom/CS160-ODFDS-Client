@@ -47,7 +47,7 @@ export class Directions extends Component {
           path={this.state.coords}
           strokeColor="#0000FF"
           strokeOpacity={0.8}
-          strokeWeight={2} />
+          strokeWeight={2}></Polyline>
       </Map>
     );
   }

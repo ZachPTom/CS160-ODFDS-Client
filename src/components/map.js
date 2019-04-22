@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { GoogleApiWrapper, InfoWindow, Marker } from 'google-maps-react';
+import ReactDOM from 'react-dom';
 
 import CurrentLocation from './currentLocation';
 import Polyline from '@mapbox/polyline';
@@ -27,7 +28,14 @@ export class MapContainer extends Component {
     }
   };
 
+  
   render() {
+    const triangleCoords = [
+      {lat: 25.774, lng: -80.190},
+      {lat: 18.466, lng: -66.118},
+      {lat: 32.321, lng: -64.757},
+      {lat: 25.774, lng: -80.190}
+    ];
     return (
       <CurrentLocation centerAroundCurrentLocation google={this.props.google}>
         <Marker onClick={this.onMarkerClick} name={'current location'} />
@@ -40,11 +48,11 @@ export class MapContainer extends Component {
             <h4>{this.state.selectedPlace.name}</h4>
           </div>
         </InfoWindow>
-        <Polyline
-        path={CurrentLocation.state.coords}
+        {/* <Polyline
+        path={triangleCoords}
         strokeColor="#0000FF"
         strokeOpacity={0.8}
-        strokeWeight={2} /> 
+        strokeWeight={2} />  */}
         </CurrentLocation>
     );
   }
