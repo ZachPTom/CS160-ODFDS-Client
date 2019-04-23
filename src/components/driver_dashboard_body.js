@@ -28,8 +28,8 @@ const HelloTest = () => {
         >
           Start Shift
         </Button>
-        <Button variant="outlined" color="secondary" component={Link} to="/map">
-          Restaurant Location
+        <Button variant="outlined" color="secondary" component={Link} to="/map2">
+          Directions
         </Button>
       </CardActions>
     </React.Fragment>
