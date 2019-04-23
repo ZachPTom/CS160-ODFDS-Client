@@ -23,7 +23,8 @@ export class MapContainer extends Component {
           showingInfoWindow: true,
           activeMarker: {},
           selectedPlace: {},
-          items: '<h1> Directions </h1>'
+          items: '<h1> Directions </h1>',
+          userToken: window.localStorage.getItem('token')
         };
     }
 
@@ -44,7 +45,28 @@ export class MapContainer extends Component {
     };
 
     componentDidMount() {
-      this.getDirections("37.333911,-121.881848", "37.349869, -121.899644");
+      this.getOrderAddress();
+      this.getDirections("37.333911,-121.881848", "37.348118,-121.899085");
+      console.log(this.state.destination)
+    }
+
+    getOrderAddress() {
+      if(this.state.userToken) {
+        var userTokenArr = this.state.userToken.split(':');
+        var userType = userTokenArr[0];
+        var token = userTokenArr[1];
+        Axios.post('http://127.0.0.1:8000/api/driver/r/order/', {
+            "key": token
+          })
+          //test with: https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/posts.json
+          .then(response => {
+              this.setState({destination: response.address})
+              console.log(response.address)
+              console.log(this.state.destination)
+          })
+          .catch(error => {this.setState({ error, isLoading: false })
+          console.log('ooga booga');})
+      }
     }
 
     getDirections(startLoc, destinationLoc) {
@@ -59,7 +81,7 @@ export class MapContainer extends Component {
             credentials: 'same-origin',}
           )
             .then(response => {
-              console.log(response)
+              //console.log(response)
               const elements = response.data.routes[0].legs[0].steps;
               for (const [index, value] of elements.entries()) {
                 this.state.items += '<p>' + value.html_instructions + '</p>'
@@ -76,7 +98,7 @@ export class MapContainer extends Component {
           this.setState({coords: coords});
           this.setState({destination: response.data.routes[0].legs[0].end_location});
           this.setState({destination_name: response.data.routes[0].legs[0].end_address})
-          console.log(this.state.destination);
+          //console.log(this.state.destination);
           return coords;
             })
       } catch(error) {
@@ -95,7 +117,6 @@ export class MapContainer extends Component {
     return (
       <React.Fragment>
         <div style={divStyle} dangerouslySetInnerHTML={{__html: this.state.items}}></div>
-        <div>
         <Map
           google={this.props.google}
           zoom={14}
@@ -122,7 +143,6 @@ export class MapContainer extends Component {
             </div>
           </InfoWindow>
         </Map>
-        </div>
       </React.Fragment>
     );
   }

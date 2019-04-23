@@ -74,7 +74,7 @@ const HelloTest = () => {
           variant="contained"
           color="secondary"
           component={Link}
-          to="/map"
+          to="/map2"
         >
           Restaurant Location
         </Button>
