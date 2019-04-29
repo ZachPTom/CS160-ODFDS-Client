@@ -7,48 +7,49 @@ import "typeface-roboto";
 const imgfood = require("../breakfast.png");
 const divStyle = {
   width: "100%",
-  height: "772px",
+  height: "550px",
   backgroundImage: `url(${imgfood})`,
   backgroundSize: "cover",
-  marginTop: "-45px"
+  marginTop: "-85px"
 };
 const headerStyle = {
-  padding: "90px",
+  paddingTop: "190px",
   color: "#FFFF99",
-  fontSize: "80px",
+  fontSize: "120px",
   fontWeight: "normal",
   fontFamily: "roboto"
 };
 const paraStyle = {
-  color: "white",
-  fontWeight: "normal",
+  paddingTop: "210px",
+  fontWeight: "300",
   fontFamily: "roboto"
 };
 const buttonStyle = {
   marginTop: "50px",
   fontSize: "20px",
   padding: "20px",
-  color: "#FFFF99",
-  fontWeight: "normal"
+  fontWeight: "normal",
+  marginBottom: "40px"
 };
 
 class Welcome extends React.Component {
   render() {
     return (
-      <div className="welcomponent" style={divStyle}>
+      <div fullWidth style={divStyle}>
         <h1 align="center" style={headerStyle}>
           ODFDS
         </h1>
         <h2 align="center" style={paraStyle}>
           Welcome to a world of revolutionary food delivery. Reimagined, in a
-          way that you have never seen before. Join us on this journey of
-          getting delicious, mouth-watering food from your favorite restaurant,
+          way that you have never seen before. <br /> Join us on this journey of
+          getting delicious, mouth-watering food from your favorite restaurant,{" "}
+          <br />
           to the tastebuds on people's tongues. <br />
           Become a driver or add your restaurant today!
         </h2>
         <CardActions style={{ justifyContent: "center" }}>
           <Button
-            variant="outlined"
+            variant="contained"
             color="secondary"
             component={Link}
             to="/login"
