@@ -1,6 +1,7 @@
-import React from 'react';
-import axios from 'axios';
+import React from "react";
+import axios from "axios";
 import Button from "@material-ui/core/Button";
+import CardActions from "@material-ui/core/CardActions";
 import { Link } from "react-router-dom";
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -11,15 +12,13 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import InboxIcon from '@material-ui/icons/Inbox';
 import DraftsIcon from '@material-ui/icons/Drafts';
-import CardActions from "@material-ui/core/CardActions";
-
 
 const styles = theme => ({
-	   root: {
-	   width: '100%',
-	   maxWidth: 360,
-	   backgroundColor: theme.palette.background.paper,
-	},
+  root: {
+    width: "100%",
+    maxWidth: 360,
+    backgroundColor: theme.palette.background.paper
+  }
 });
 
 class orderBody extends React.Component{
@@ -41,18 +40,17 @@ class orderBody extends React.Component{
 	     this.handleSubmit = this.handleSubmit.bind(this);
 	     console.log(this.state.secondOrderList)
   	}
+  handleChange = event => {
+    this.setState({
+      selected: event.currentTarget.dataset.id
+    });
+  };
 
-	handleChange = (event) => {
-     this.setState({
-      	selected : event.currentTarget.dataset.id
-     })
-  	}
-
-  	handleChange2 = (event) => {
-     this.setState({
-      	selected2 : event.currentTarget.dataset.id
-     })
-  	}
+  handleChange2 = event => {
+    this.setState({
+      selected2: event.currentTarget.dataset.id
+    });
+  };
 
 	componentDidMount() {
 		if(this.state.userToken && this.state.firstState) {

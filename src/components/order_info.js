@@ -4,26 +4,22 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Button from '@material-ui/core/Button';
-import axios from 'axios'
+import axios from 'axios';
 import CardActions from "@material-ui/core/CardActions";
 import "typeface-roboto";
 
-
-
 class AddressForm extends React.Component {
-
-
   constructor() {
-     super();
-     this.state = {
-      price:'',
-      street_address: '',
-      city: '',
-      state:'',
-      userToken: window.localStorage.getItem('token')
-     };
-     this.handleChange = this.handleChange.bind(this);
-     this.handleSubmit = this.handleSubmit.bind(this);
+    super();
+    this.state = {
+      price: "",
+      street_address: "",
+      city: "",
+      state: "",
+      userToken: window.localStorage.getItem("token")
+    };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -44,38 +40,46 @@ class AddressForm extends React.Component {
   handleChange = param => (event) => {
      this.setState({
       [param]: event.target.value
-     })
-  }
-  handleSubmit = (e) => {
-    if(this.state.userToken) {
+    });
+  };
+  handleSubmit = e => {
+    if (this.state.userToken) {
       e.preventDefault();
-      var userTokenArr = this.state.userToken.split(':');
+      var userTokenArr = this.state.userToken.split(":");
       var userType = userTokenArr[0];
       var token = userTokenArr[1];
-      console.log(userTokenArr)
-      var location = this.state.street_address + ' ' + this.state.city + ' ' + this.state.state
-      axios.get('https://maps.googleapis.com/maps/api/geocode/json',{
-        params:{
-          address:location,
-          key:'AIzaSyCAp9svAAYxNF4P4BXO1-BVQ4lcMCHn09k'
-        }
-      }).then(res => {
-        axios.post('http://127.0.0.1:8000/api/restaurant/r/post/', {
-          lat: res.data.results[0].geometry.location.lat,
-          long: res.data.results[0].geometry.location.lng,
-          price: this.state.price,
-          key: token
+      console.log(userTokenArr);
+      var location =
+        this.state.street_address +
+        " " +
+        this.state.city +
+        " " +
+        this.state.state;
+      axios
+        .get("https://maps.googleapis.com/maps/api/geocode/json", {
+          params: {
+            address: location,
+            key: "AIzaSyCAp9svAAYxNF4P4BXO1-BVQ4lcMCHn09k"
+          }
         })
         .then(res => {
-          console.log(res)
-          this.props.history.push('/rest_dashboard')
-          alert("Order Posted")
+          axios
+            .post("http://127.0.0.1:8000/api/restaurant/r/post/", {
+              lat: res.data.results[0].geometry.location.lat,
+              long: res.data.results[0].geometry.location.lng,
+              price: this.state.price,
+              key: token
+            })
+            .then(res => {
+              console.log(res);
+              this.props.history.push("/rest_dashboard");
+              alert("Order Posted");
+            })
+            .catch(error => console.log(error));
         })
-        .catch(error => console.log(error))
-      })
-        .catch(error => console.log(error))
+        .catch(error => console.log(error));
     }
-  }
+  };
 
   render() {
     return (
