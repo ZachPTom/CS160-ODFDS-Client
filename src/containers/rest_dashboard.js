@@ -30,6 +30,7 @@ class App extends React.Component {
           });
         })
         .catch(error => this.setState({ error, isLoading: false }));
+        console.log(this.state.restaurant);
     }
   }
   componentDidMount() {
@@ -85,7 +86,7 @@ class App extends React.Component {
                 fontWeight: "normal"
               }}
             >
-              {"Geolocation: " + this.state.restaurant.address}
+              {"Location: " + this.state.restaurant.addressstr}
             </p>
             <CardActions style={{ justifyContent: "center" }}>
               <Button

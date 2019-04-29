@@ -64,6 +64,7 @@ class DriverSignup extends React.Component {
 		state: '',
 		lat: '',
 		lng: '',
+		address: '',
 		userToken: window.localStorage.getItem("token"),
      };
      this.handleChange = this.handleChange.bind(this);
@@ -104,13 +105,14 @@ class DriverSignup extends React.Component {
 				lat: response.data.results[0].geometry.location.lat
 			})
 			this.setState({
-				lng: response.data.results[0].geometry.location.lng
+				lng: response.data.results[0].geometry.location.lng,
+				address: location
 			})
 			console.log(this.state.lat)
 			console.log(this.state.lng)
 			this.props.onAuth(this.state.email, this.state.password1,
 				this.state.first_name, this.state.last_name,
-				this.state.lat, this.state.lng)
+				this.state.lat, this.state.lng, this.state.address)
 			.then( res =>{
   					console.log('res here');
   					console.log(res);
@@ -230,8 +232,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchProps = dispatch => {
 	return {
-		onAuth: (email, password1, first_name, last_name, lat, lng) => 
-		dispatch(actions.authSignupDriver(email, password1, first_name, last_name, lat, lng))
+		onAuth: (email, password1, first_name, last_name, lat, lng, address) => 
+		dispatch(actions.authSignupDriver(email, password1, first_name, last_name, lat, lng, address))
 	}
 }
 
