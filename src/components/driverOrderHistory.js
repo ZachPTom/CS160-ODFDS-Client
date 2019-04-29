@@ -78,8 +78,7 @@ class OrderHistory extends React.Component {
             justifyContent: "center",
             fontFamily: "roboto",
             fontSize: "60px",
-            fontWeight: "300",
-            paddingTop: "40px"
+            fontWeight: "300"
           }}
         >
           {" "}
