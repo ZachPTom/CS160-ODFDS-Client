@@ -137,6 +137,7 @@ export class RestLiveMap extends React.Component {
           // const { order_id } = this.props.match.params
           // console.log(order_id)
           //this.getOrderAddress();
+          //console.log(parseInt(this.props.match.params.order_id))
           this.getDirections();
         //this.updateDriver();
           this.startMove();
@@ -180,14 +181,14 @@ export class RestLiveMap extends React.Component {
   
 
     getDirections() {
-      this.setState({ order_id: parseInt(this.props.match.params) });
+      //this.setState({ order_id: parseInt(this.props.match.params) });
       if(this.state.userToken) {
         var userTokenArr = this.state.userToken.split(':');
         var userType = userTokenArr[0];
         var token = userTokenArr[1];
         Axios.post('http://127.0.0.1:8000/api/restaurant/r/route/', {
             key: token,
-            order_id: this.state.order_id //window.localStorage.getItem("firstOrder"),
+            order_id: parseInt(this.props.match.params.order_id) //window.localStorage.getItem("firstOrder"),
             //second_id: 44 //window.localStorage.getItem("secondOrder")
           })
           .then(response => {
@@ -392,7 +393,7 @@ export class RestLiveMap extends React.Component {
       var token = userTokenArr[1];
     Axios.post('http://127.0.0.1:8000/api/restaurant/r/route/', {
       key: token,
-      order_id: this.state.order_id //this.state.currentPos
+      order_id: parseInt(this.props.match.params.order_id) //this.state.currentPos
     })
     .then(res => {
       console.log(res)
