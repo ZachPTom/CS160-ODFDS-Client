@@ -61,6 +61,7 @@ export class MapContainer extends Component {
           selectedPlace: {},
           currentIdx: 0,
           currentPos: {}, //driver current pos
+          currentPosArray: [],
           items: '<h1> Directions </h1>',
           userToken: window.localStorage.getItem('token'),
           buttons: window.localStorage.getItem('buttons') || -1
@@ -90,13 +91,21 @@ export class MapContainer extends Component {
         this.setState({ currentIdx: 0 });
       else
         this.setState({ currentIdx: this.state.currentIdx + 1 }, function () {
-          var nextPos = this.state.coords[this.state.increment]
+          if (this.state.increment >= this.state.coords.length-1) {
+            this.setState({increment: 0})
+            var nextPos = this.state.coords2[this.state.increment]
+          } else {
+            var nextPos = this.state.coords[this.state.increment]
+          }
           this.setState({increment: this.state.increment + 1})
-          if (this.state.increment > 1000) {
+          if (this.state.increment > 3000) {
             this.stopMove();
           }
           //{ lat: this.state.startPos.lat + (latDelta * this.state.currentIdx), lng: this.state.startPos.lng + (lngDelta * this.state.currentIdx) };
           this.setState({ currentPos: nextPos });
+          this.setState({ currentPosArray: nextPos });
+          console.log(this.state.currentPos + 'current position')
+          console.log(this.state.currentPosArray + 'current position array')
         });
     }
   
@@ -120,7 +129,7 @@ export class MapContainer extends Component {
         var userType = userTokenArr[0];
         var token = userTokenArr[1];
         if(userType === 'driver') {
-          this.getOrderAddress();
+          //this.getOrderAddress();
         this.getDirections();
         this.startMove();
           console.log(this.state.destination)
@@ -133,30 +142,32 @@ export class MapContainer extends Component {
     }
   
 
-    getOrderAddress() {
-      if(this.state.userToken) {
-        var userTokenArr = this.state.userToken.split(':');
-        var userType = userTokenArr[0];
-        var token = userTokenArr[1];
-        Axios.post('http://127.0.0.1:8000/api/driver/r/order/', {
-            "key": token
-          })
-          //test with: https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/posts.json
-          .then(response => {
-              this.setState({first_destination_id: response.data[0].id})
-              this.setState({second_destination_id: response.data[1].id})
-              console.log(response.data)
-              console.log(response.data[0].id)
-              console.log(this.state.first_destination_id)
-              //console.log(response.data[1].id)  
-              return true
-          })
-          .catch(error => {this.setState({ error, isLoading: false })
-          console.log(error);
-          return false})
-      }
-      return false
-    }
+    // getOrderAddress() {
+    //   if(this.state.userToken) {
+    //     var userTokenArr = this.state.userToken.split(':');
+    //     var userType = userTokenArr[0];
+    //     var token = userTokenArr[1];
+    //     Axios.post('http://127.0.0.1:8000/api/driver/r/order/', {
+    //         "key": 123
+    //       })
+    //       //test with: https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/posts.json
+    //       .then(response => {
+    //           this.setState({first_destination_id: response.data[0].id})
+    //           this.setState({second_destination_id: response.data[1].id})
+    //           console.log(response.data)
+    //           console.log(response.data[0].id)
+    //           console.log(response.data[1].id)
+    //           console.log(this.state.first_destination_id)
+    //           console.log(this.state.second_destination_id)
+    //           //console.log(response.data[1].id)  
+    //           return true
+    //       })
+    //       .catch(error => {this.setState({ error, isLoading: false })
+    //       console.log(error);
+    //       return false})
+    //   }
+    //   return false
+    // }
   
 
     getDirections() {
@@ -165,9 +176,9 @@ export class MapContainer extends Component {
         var userType = userTokenArr[0];
         var token = userTokenArr[1];
         Axios.post('http://127.0.0.1:8000/api/driver/r/route/', {
-            key: token,
-            first_id: this.state.first_destination_id,
-            second_id: this.state.second_destination_id
+            key: 123,
+            first_id: 43, //window.localStorage.getItem("firstOrder"),
+            second_id: 44 //window.localStorage.getItem("secondOrder")
           })
           .then(response => {
               this.setState({start: response.data.driver})
@@ -220,12 +231,14 @@ export class MapContainer extends Component {
           // console.log(this.state.first_destination_object)
           this.setState({start_destination_object: response.data.routes[0].legs[0].start_location});
           this.setState({currentPos: response.data.routes[0].legs[0].start_location})
+          this.setState({currentPosArray: response.data.routes[0].legs[0].start_location})
           this.setState({start_destination_name: response.data.routes[0].legs[0].start_address});
           this.setState({first_destination_object: response.data.routes[0].legs[0].end_location});
           //console.log(this.state.destination_object)
           this.setState({first_destination_name: response.data.routes[0].legs[0].end_address})
           //console.log(this.state.destination);
           // return coords;
+          console.log('second destination exists: ' + this.state.second_destination_exists)
           
           if (this.state.second_destination_exists) {
           return Axios.get(`https://maps.googleapis.com/maps/api/directions/json?origin=${this.state.first_destination.toString()}
@@ -254,6 +267,7 @@ export class MapContainer extends Component {
               }
             });
           this.setState({coords2: coords});
+          console.log(this.state.coords2)
           //this.setState({coords: coords});
           //this.setState({first})
           // this.setState({first_destination_object: this.toObject(this.state.first_destination)});
@@ -367,8 +381,7 @@ export class MapContainer extends Component {
       var token = userTokenArr[1];
     Axios.post('http://127.0.0.1:8000/api/driver/r/update/', {
       key: token,
-      driver_lat: this.state.currentPos[0],
-      driver_long: this.state.currentPos[1]
+      driver: this.state.currentPos
     })
     .then(res => {
       console.log(res)

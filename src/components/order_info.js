@@ -102,7 +102,8 @@ class AddressForm extends React.Component {
             align="center"
             style={{
               fontFamily: "roboto",
-              fontSize: "48px",
+              fontSize: "60px",
+              fontWeight: "300",
               paddingTop: "50px"
             }}
           >
