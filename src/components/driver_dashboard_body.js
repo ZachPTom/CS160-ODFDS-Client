@@ -74,7 +74,7 @@ const HelloTest = () => {
           component={Link}
           to="/map2"
         >
-          Restaurant Location
+          Directions
         </Button>
       </CardActions>
     </React.Fragment>

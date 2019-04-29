@@ -23,6 +23,7 @@ export class CurrentLocation extends React.Component {
       userToken: window.localStorage.getItem('token')
     };
   }
+
   componentDidMount() {
     if(this.state.userToken){
       var userTokenArr = this.state.userToken.split(':');
@@ -48,29 +49,29 @@ export class CurrentLocation extends React.Component {
     //} else {
       //this.props.history.push('/')
     }
-    this.getDirections("37.333911,-121.881848", "37.333024, -121.884756");
+    //this.getDirections("37.333911,-121.881848", "37.333024, -121.884756");
     this.loadMap();
   }
 
-  async getDirections(startLoc, destinationLoc) {
-    try {
-        let resp = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${ startLoc }&destination=${ destinationLoc }`, 
-          {mode: "no-cors"})
-        let respJson = await resp.json();
-        let points = Polyline.decode(respJson.routes[0].overview_polyline.points);
-        let coords = points.map((point, index) => {
-            return  {
-                latitude : point[0],
-                longitude : point[1]
-            }
-        })
-        this.setState({coords: coords})
-        return coords
-    } catch(error) {
-        //alert(error)
-        return error
-    }
-  }
+  // async getDirections(startLoc, destinationLoc) {
+  //   try {
+  //       let resp = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${ startLoc }&destination=${ destinationLoc }`, 
+  //         {mode: "no-cors"})
+  //       let respJson = await resp.json();
+  //       let points = Polyline.decode(respJson.routes[0].overview_polyline.points);
+  //       let coords = points.map((point, index) => {
+  //           return  {
+  //               latitude : point[0],
+  //               longitude : point[1]
+  //           }
+  //       })
+  //       this.setState({coords: coords})
+  //       return coords
+  //   } catch(error) {
+  //       //alert(error)
+  //       return error
+  //   }
+  // }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.google !== this.props.google) {
