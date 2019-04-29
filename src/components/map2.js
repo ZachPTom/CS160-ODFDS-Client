@@ -7,14 +7,18 @@ import CardActions from "@material-ui/core/CardActions";
 //import Timer from './timer'
 
 const mapStyles = {
-  width: '100%',
+  width: '50%',
   height: '100%'
 };
 
 const divStyle = {
   float: 'right',
-  width: '40%'
+  width: '50%'
 };
+
+const divStyle2 = {
+  float: 'center'
+}
 
 const buttonStyle = {
   float: 'right',
@@ -117,27 +121,27 @@ export class MapContainer extends Component {
       }
     }
 
-    // getOrderAddress() {
-    //   if(this.state.userToken) {
-    //     var userTokenArr = this.state.userToken.split(':');
-    //     var userType = userTokenArr[0];
-    //     var token = userTokenArr[1];
-    //     Axios.post('http://127.0.0.1:8000/api/driver/r/order/', {
-    //         "key": token
-    //       })
-    //       //test with: https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/posts.json
-    //       .then(response => {
-    //           this.setState({destination: response.data[0].address})
-    //           console.log(response.data[0].address)
-    //           console.log(this.state.destination)
-    //           return true
-    //       })
-    //       .catch(error => {this.setState({ error, isLoading: false })
-    //       console.log(error);
-    //       return false})
-    //   }
-    //   return false
-    // }
+    getOrderAddress() {
+      if(this.state.userToken) {
+        var userTokenArr = this.state.userToken.split(':');
+        var userType = userTokenArr[0];
+        var token = userTokenArr[1];
+        Axios.post('http://127.0.0.1:8000/api/driver/r/order/', {
+            "key": token
+          })
+          //test with: https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/posts.json
+          .then(response => {
+              this.setState({destination: response.data[0].address})
+              console.log(response.data[0].address)
+              console.log(this.state.destination)
+              return true
+          })
+          .catch(error => {this.setState({ error, isLoading: false })
+          console.log(error);
+          return false})
+      }
+      return false
+    }
 
     getDirections() {
       if(this.state.userToken) {
@@ -263,6 +267,7 @@ export class MapContainer extends Component {
           console.log(error);
       })
     }
+  }
       // this.setState({selected: window.localStorage.getItem('firstOrder')})
       // this.setState({destination: this.state.selected.address})
       // console.log(window.localStorage.getItem('firstOrder'))
@@ -392,10 +397,11 @@ export class MapContainer extends Component {
 
   return (
       <React.Fragment>
+        <div style={divStyle}>
         <div>
             {oneOrTwo}
         </div>
-        {/* <div style={divStyle} dangerouslySetInnerHTML={{__html: this.state.items}}></div> */}
+        <div style={divStyle2} dangerouslySetInnerHTML={{__html: this.state.items}}></div>
         <Button
           type = 'submit'
 				    fullWidth
@@ -410,6 +416,7 @@ export class MapContainer extends Component {
 				    color="primary"
           onClick={this.stopMove}> Stop
         </Button>
+        </div>
         <Map
           google={this.props.google}
           zoom={14}
