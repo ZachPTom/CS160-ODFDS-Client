@@ -69,7 +69,7 @@ class orderBody extends React.Component {
             console.log(res);
           })
           .catch(error => {
-          	console.log(error)
+            console.log(error);
           });
       } else {
         this.props.history.push("/rest_dashboard");
@@ -240,7 +240,10 @@ class orderBody extends React.Component {
                   >
                     <ListItemText
                       primary={
-                        "Price: " + d.total_price + "\tRestaurant Name: " + d.rest
+                        "Price: " +
+                        d.total_price +
+                        "\tRestaurant Name: " +
+                        d.rest
                       }
                     />
                   </ListItem>
@@ -281,7 +284,7 @@ class orderBody extends React.Component {
               fontWeight: "300"
             }}
           >
-            Orders from same place:{" "}
+            Orders from same place{" "}
           </h1>
           <CardActions
             style={{
@@ -303,7 +306,10 @@ class orderBody extends React.Component {
                   >
                     <ListItemText
                       primary={
-                        "Price: " + d.total_price + "\tRestaurant Name: " + d.rest
+                        "Price: " +
+                        d.total_price +
+                        "\tRestaurant Name: " +
+                        d.rest
                       }
                     />
                   </ListItem>
@@ -351,12 +357,12 @@ class orderBody extends React.Component {
     } else if (finalState === "true") {
       orderPage = (
         <div>
-          <CardActions style={{ justifyContent: "center", paddingTop: "45px" }}>
+          <CardActions style={{ justifyContent: "center", paddingTop: "95px" }}>
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              color="primary"
+              color="secondary"
               onClick={this.handlePicked}
               to="/driver_dashboard"
               style={{

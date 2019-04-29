@@ -61,21 +61,7 @@ const HelloTest = () => {
         >
           Start Shift
         </Button>
-        <Button
-          style={{
-            maxWidth: "180px",
-            maxHeight: "60px",
-            minWidth: "180px",
-            minHeight: "60px",
-            fontSize: "24px"
-          }}
-          variant="contained"
-          color="secondary"
-          component={Link}
-          to="/map2"
-        >
-          Directions
-        </Button>
+
       </CardActions>
     </React.Fragment>
   );
