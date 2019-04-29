@@ -414,10 +414,10 @@ export class MapContainer extends Component {
 
     return (
       <React.Fragment>
+      <div>
+        {oneOrTwo}
+      </div>
         <div style={divStyle}>
-        <div>
-            {oneOrTwo}
-        </div>
         <div style={divStyle2} dangerouslySetInnerHTML={{__html: this.state.items}}></div>
         <Button
           type = 'submit'
