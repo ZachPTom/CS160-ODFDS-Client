@@ -370,6 +370,14 @@ export class MapContainer extends Component {
     //   {lat: 37.333911, lng: -121.881848},
     //   {lat: 37.333024, lng: -121.884756}
     // ];
+    let iconMarker = new window.google.maps.MarkerImage(
+      "https://lh3.googleusercontent.com/bECXZ2YW3j0yIEBVo92ECVqlnlbX9ldYNGrCe0Kr4VGPq-vJ9Xncwvl16uvosukVXPfV=w300",
+      null, /* size is determined at runtime */
+      null, /* origin is 0,0 */
+      null, /* anchor is bottom center of the scaled image */
+      new window.google.maps.Size(32, 32)
+  );
+
     const buttons = this.state.buttons;
     let oneOrTwo;
     if (buttons == 2) {
@@ -461,7 +469,7 @@ export class MapContainer extends Component {
               strokeOpacity={0.8}
               strokeWeight={4}>
           </Polyline>
-          <Marker onClick={this.onMarkerClick} name={'driver'} position={this.state.currentPos}/>
+          <Marker icon={iconMarker} onClick={this.onMarkerClick} name={'driver'} position={this.state.currentPos}/>
           {/* <Marker onClick={this.onMarkerClick} name={'start: ' + this.state.start_destination_name} position={this.state.start_destination_object}/> */}
           <Marker onClick={this.onMarkerClick} name={'first destination: ' + this.state.first_destination_name} position={this.state.first_destination_object}/>
           <Marker onClick={this.onMarkerClick} name={'final destination: ' + this.state.final_destination_name} position={this.state.final_destination_object}/>
