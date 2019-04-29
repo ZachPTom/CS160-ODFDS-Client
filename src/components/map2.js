@@ -379,8 +379,9 @@ export class MapContainer extends Component {
     if (this.state.userToken) {
       var userTokenArr = this.state.userToken.split(":");
       var token = userTokenArr[1];
+      console.log(this.state.currentPos)
     Axios.post('http://127.0.0.1:8000/api/driver/r/update/', {
-      key: token,
+      key: 123, //token,
       driver: this.state.currentPos
     })
     .then(res => {
@@ -458,9 +459,9 @@ export class MapContainer extends Component {
       <div>
         {oneOrTwo}
       </div>
-        {/* <div>
+        <div>
         {this.updateDriver()}
-        </div> */}
+        </div>
         <div style={divStyle}>
         <div style={divStyle2} dangerouslySetInnerHTML={{__html: this.state.items}}></div>
         {/* <Button
