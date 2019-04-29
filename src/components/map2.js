@@ -422,7 +422,7 @@ export class MapContainer extends Component {
       var token = userTokenArr[1];
       console.log(this.state.currentPos);
       Axios.post("http://127.0.0.1:8000/api/driver/r/update/", {
-        key: 123, //token,
+        key: token, //token,
         driver: this.state.currentPos
       })
         .then(res => {
@@ -523,9 +523,9 @@ export class MapContainer extends Component {
             />
           </div>
         </CardActions>
-        {/* <div>
+        <div>
         {this.updateDriver()}
-        </div> */}
+        </div>
         <Map
           google={this.props.google}
           zoom={12}

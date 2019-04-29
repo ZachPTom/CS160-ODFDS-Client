@@ -237,6 +237,8 @@ export class RestLiveMap extends React.Component {
               }
             });
           this.setState({coords: coords});
+          this.setState({driverCoords: coords});
+
           console.log(this.state.coords + 'coords')
           //this.setState({first})
           // this.setState({first_destination_object: this.toObject(this.state.first_destination)});
@@ -250,6 +252,8 @@ export class RestLiveMap extends React.Component {
           this.setState({first_destination_name: response.data.routes[0].legs[0].end_address})
           //console.log(this.state.destination);
           // return coords;
+          this.updateDriver();
+
           
           if (this.state.second_destination_exists) {
           return Axios.get(`https://maps.googleapis.com/maps/api/directions/json?origin=${this.state.first_destination.toString()}
@@ -278,6 +282,8 @@ export class RestLiveMap extends React.Component {
               }
             });
           this.setState({coords2: coords});
+          this.setState({driverCoords2: coords});
+
           //this.setState({driverCoords2: coords});
           //this.setState({coords: coords});
           //this.setState({first})

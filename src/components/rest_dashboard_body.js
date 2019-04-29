@@ -65,22 +65,6 @@ const RestHeader = () => {
           Post Order
         </Button>
 
-        <Button
-          style={{
-            maxWidth: "340px",
-            maxHeight: "60px",
-            minWidth: "340px",
-            minHeight: "60px",
-            fontSize: "24px"
-          }}
-          variant="contained"
-          color="secondary"
-          component={Link}
-          to="/map"
-          size="large"
-        >
-          Restaurant Location
-        </Button>
       </CardActions>
     </React.Fragment>
   );
