@@ -5,6 +5,9 @@ import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Button from '@material-ui/core/Button';
 import axios from 'axios'
+import CardActions from "@material-ui/core/CardActions";
+import "typeface-roboto";
+
 
 
 class AddressForm extends React.Component {
@@ -21,6 +24,21 @@ class AddressForm extends React.Component {
      };
      this.handleChange = this.handleChange.bind(this);
      this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    if(this.state.userToken){
+      var userTokenArr = this.state.userToken.split(':');
+      var userType = userTokenArr[0];
+      var token = userTokenArr[1];
+      if(userType === 'restaurant') {
+        console.log(this.state.userToken)
+      } else {
+        this.props.history.push('/driver_dashboard')
+      }
+    } else {
+      this.props.history.push('/')
+    }
   }
 
   handleChange = param => (event) => {
@@ -59,12 +77,30 @@ class AddressForm extends React.Component {
     }
   }
 
-  render () {
-  return (
-    <form>
-      <Typography variant="h6" gutterBottom>
-        Order Information
-      </Typography>
+  render() {
+    return (
+      <form>
+        <Typography
+          variant="h1"
+          gutterBottom
+          align="center"
+          style={{
+            fontFamily: "roboto",
+            fontSize: "48px",
+            paddingTop: "50px"
+          }}
+        >
+          Order Information
+        </Typography>
+        <CardActions
+          style={{
+            justifyContent: "center",
+            paddingTop: "45px",
+            marginLeft: "auto",
+            marginRight: "auto",
+            width: "60%"
+          }}
+        >
           <TextField
             required
             id="price"
@@ -72,9 +108,21 @@ class AddressForm extends React.Component {
             label="Price"
             value={this.state.price}
             fullWidth
-            onChange={this.handleChange('price')}
+            onChange={this.handleChange("price")}
             autoComplete="price"
+            variant="outlined"
           />
+        </CardActions>
+
+        <CardActions
+          style={{
+            justifyContent: "center",
+            paddingTop: "15px",
+            marginLeft: "auto",
+            marginRight: "auto",
+            width: "60%"
+          }}
+        >
           <TextField
             required
             id="street_address"
@@ -82,41 +130,76 @@ class AddressForm extends React.Component {
             label="Street Adress"
             value={this.state.street_address}
             fullWidth
-            onChange={this.handleChange('street_address')}
+            onChange={this.handleChange("street_address")}
             autoComplete="Street Adress"
+            variant="outlined"
           />
-           <TextField
+        </CardActions>
+
+        <CardActions
+          style={{
+            justifyContent: "center",
+            paddingTop: "15px",
+            marginLeft: "auto",
+            marginRight: "auto",
+            width: "60%"
+          }}
+        >
+          <TextField
             required
             id="city"
             name="city"
             label="City"
             value={this.state.city}
             fullWidth
-            onChange={this.handleChange('city')}
+            onChange={this.handleChange("city")}
             autoComplete="City"
+            variant="outlined"
           />
-           <TextField
+        </CardActions>
+
+        <CardActions
+          style={{
+            justifyContent: "center",
+            paddingTop: "15px",
+            marginLeft: "auto",
+            marginRight: "auto",
+            width: "60%"
+          }}
+        >
+          <TextField
             required
             id="state"
             name="state"
             label="State"
             value={this.state.state}
             fullWidth
-            onChange={this.handleChange('state')}
+            onChange={this.handleChange("state")}
             autoComplete="State"
+            variant="outlined"
           />
-        <Button
-                  type="submit"
-                  variant="contained"
-                  fullWidth
-                  onClick={this.handleSubmit}
-                  color="primary"
-                >
-                  Submit
-        </Button>
+        </CardActions>
+        <CardActions style={{ justifyContent: "center", paddingTop: "45px" }}>
+          <Button
+            type="submit"
+            variant="contained"
+            onClick={this.handleSubmit}
+            color="secondary"
+            style={{
+              maxWidth: "180px",
+              maxHeight: "60px",
+              minWidth: "180px",
+              minHeight: "60px",
+              fontSize: "24px"
+            }}
+          >
+            Submit
+          </Button>
+        </CardActions>
       </form>
-  );
+    );
+  }
 }
-}
+
 
 export default AddressForm;

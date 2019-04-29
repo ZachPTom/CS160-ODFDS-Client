@@ -63,10 +63,24 @@ class DriverSignup extends React.Component {
 		city: '',
 		state: '',
 		lat: '',
-		lng: ''
+		lng: '',
+		userToken: window.localStorage.getItem("token"),
      };
      this.handleChange = this.handleChange.bind(this);
      this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    if (this.state.userToken) {
+      var userTokenArr = this.state.userToken.split(':');
+      var userType = userTokenArr[0];
+      var token = userTokenArr[1];
+      if(userType === 'driver') {
+          this.props.history.push('/driver_dashboard')
+	} else{
+          this.props.history.push('/rest_dashboard')
+        }
+    }
   }
 
   handleChange = param => (event) => {

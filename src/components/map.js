@@ -28,6 +28,20 @@ export class MapContainer extends Component {
     }
   };
 
+  componentDidMount() {
+      if(this.state.userToken){
+        var userTokenArr = this.state.userToken.split(':');
+        var userType = userTokenArr[0];
+        var token = userTokenArr[1];
+        if(userType === 'restaurant') {
+        } else{
+          this.props.history.push('/driver_dashboard')
+        }
+      } else {
+        this.props.history.push('/')
+      }
+    }
+
   
   render() {
     const triangleCoords = [

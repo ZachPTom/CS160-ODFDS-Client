@@ -32,12 +32,12 @@ class ButtonAppBar extends React.Component {
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar>
-            <Typography variant="h6" color="inherit" className={classes.grow} component={Link} to="/">
+            <Typography variant="h6" color="inherit" className={classes.grow} component={Link} to="/rest_dashboard">
             Home
             </Typography>
             {
               this.props.isAuthenticated ?
-              <Button color="inherit" onClick={this.props.logout} component={Link} to="/login/"> Logout</Button>
+              <Button color="inherit" onClick={this.props.logout} component={Link} to="/"> Logout</Button>
               :
               <Button color="inherit" component={Link} to="/login/">Login</Button>
             }

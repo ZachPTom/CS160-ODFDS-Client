@@ -33,7 +33,18 @@ class App extends React.Component {
     }
   }
   componentDidMount() {
-    this.getPosts();
+    if(this.state.userToken){
+      var userTokenArr = this.state.userToken.split(":");
+      var userType = userTokenArr[0];
+      var token = userTokenArr[1];
+      if(userType === 'restaurant') {
+        this.getPosts();
+      } else {
+        this.props.history.push('/driver_dashboard')
+      }
+    } else {
+      this.props.history.push('/')
+    }
   }
   render() {
     const { isLoading, restaurant } = this.state;

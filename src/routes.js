@@ -15,6 +15,9 @@ import CurrentLocation from './components/currentLocation';
 import Welcome from './components/Welcome';
 import AddressForm from './components/order_info';
 import Directions from './components/Directions'
+import DriverOrderHistory from './components/driverOrderHistory'
+import RestLiveMap from './components/restliveMap'
+
 
 
 const BaseRouter = () => (
@@ -25,13 +28,15 @@ const BaseRouter = () => (
 		<Route exact path='/restaurant_signup/' component={RestSignup}/>
 		<Route exact path='/rest_dashboard/' component={RestDashboard}/>
 		<Route exact path='/driver_signup/' component={DriverSignup}/>
-		<Route exact path="/orderHistory" component={OrderHistory}/>
+		<Route exact path="/orders" component={OrderHistory}/>
 		<Route exact path="/onShift" component={OnShift}/>			
 		<Route exact path="/map" component={MapContainer}/>	
 		<Route exact path="/map2" component={MapContainer2}/>	
 		<Route exact path="/currentLocation" component={CurrentLocation}/>	
 		<Route exact path='/place_order/' component={AddressForm}/>					
-		<Route exact path='/Directions/' component={Directions}/>					
+		<Route exact path='/Directions/' component={Directions}/>
+		<Route exact path='/driverOrderHistory/' component={DriverOrderHistory}/>
+		<Route exact path='/orders/:order_id' component={RestLiveMap}/>					
 
 	</div>
 )

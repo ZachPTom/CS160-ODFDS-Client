@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Map, Polyline, InfoWindow, Marker, GoogleApiWrapper } from 'google-maps-react';
 import Axios from 'axios';
+import Button from "@material-ui/core/Button";
+import CardActions from "@material-ui/core/CardActions";
 
 const mapStyles = {
   width: '50%',
@@ -10,6 +12,13 @@ const mapStyles = {
 const divStyle = {
   float: 'right',
   width: '40%'
+};
+
+const buttonStyle = {
+  float: 'right',
+  width: '40%',
+  zIndex: 1
+
 };
 
 export class MapContainer extends Component {
@@ -24,8 +33,10 @@ export class MapContainer extends Component {
           activeMarker: {},
           selectedPlace: {},
           items: '<h1> Directions </h1>',
-          userToken: window.localStorage.getItem('token')
+          userToken: window.localStorage.getItem('token'),
+          buttons: window.localStorage.getItem('buttons') || -1
         };
+
     }
 
     onMarkerClick = (props, marker, e) =>
@@ -45,9 +56,20 @@ export class MapContainer extends Component {
     };
 
     componentDidMount() {
-      this.getOrderAddress();
-      this.getDirections("37.333911,-121.881848", "37.348118,-121.899085");
-      console.log(this.state.destination)
+      if(this.state.userToken){
+        var userTokenArr = this.state.userToken.split(':');
+        var userType = userTokenArr[0];
+        var token = userTokenArr[1];
+        if(userType === 'driver') {
+          this.getOrderAddress();
+          this.getDirections("37.333911,-121.881848", "37.348118,-121.899085");
+          console.log(this.state.destination)
+        } else{
+          this.props.history.push('/rest_dashboard')
+        }
+      } else {
+        this.props.history.push('/')
+      }
     }
 
     getOrderAddress() {
@@ -108,31 +130,156 @@ export class MapContainer extends Component {
       }
     }
 
+    handleDroppedFirst = (e) => {
+      e.preventDefault();
+        if(this.state.userToken) {
+          var userTokenArr = this.state.userToken.split(':');
+              var userType = userTokenArr[0];
+              var token = userTokenArr[1];
+              console.log(userType);
+              var order_id = window.localStorage.getItem('firstOrder')
+              Axios.post('http://127.0.0.1:8000/api/driver/r/delivered/ ', {
+                  key: token,
+                  order_id: order_id
+                 })
+            .then(res => {
+              console.log(res)
+              if (this.state.buttons == 1) {
+                window.localStorage.removeItem('firstState')
+                window.localStorage.removeItem('secondState')
+                window.localStorage.removeItem('finalState')
+                window.localStorage.removeItem('lockState')
+                window.localStorage.removeItem('secondOrderList')
+                window.localStorage.removeItem('firstOrder')
+                window.localStorage.removeItem('secondOrder')
+                this.setState({buttons: 0});
+                window.localStorage.removeItem('buttons')
+                this.props.history.push('/driver_dashboard')
+                //alert("Order completed")
+              } else {
+                this.setState({buttons: 1});
+                window.localStorage.setItem('buttons', 1)
+                alert("Order 1 completed")
+              }
+            })
+            .catch(error => console.log(error));
+      }
+    }
+
+    handleDroppedSecond = (e) => {
+      e.preventDefault();
+        if(this.state.userToken) {
+          var userTokenArr = this.state.userToken.split(':');
+              var userType = userTokenArr[0];
+              var token = userTokenArr[1];
+              console.log(userType);
+              var order_id;
+              if (window.localStorage.hasOwnProperty('secondOrder')) {
+                order_id = window.localStorage.getItem('secondOrder')
+              } else {
+                order_id = window.localStorage.getItem('firstOrder')
+              }
+              Axios.post('http://127.0.0.1:8000/api/driver/r/delivered/ ', {
+                  key: token,
+                  order_id: order_id
+                 })
+            .then(res => {
+                console.log(res)
+                window.localStorage.removeItem('firstState')
+                window.localStorage.removeItem('secondState')
+                window.localStorage.removeItem('finalState')
+                window.localStorage.removeItem('lockState')
+                window.localStorage.removeItem('secondOrderList')
+                window.localStorage.removeItem('firstOrder')
+                window.localStorage.removeItem('secondOrder')
+                this.setState({buttons: 0});
+                window.localStorage.removeItem('buttons')
+                //alert("Order completed")
+                this.props.history.push('/driver_dashboard')
+            })
+            .catch(error => console.log(error));
+      }
+    }
+
+
   render() {
     // const triangleCoords = [
     //   {lat: 37.333911, lng: -121.881848},
     //   {lat: 37.333024, lng: -121.884756}
     // ];
+    const buttons = this.state.buttons;
+    let oneOrTwo;
+    if (buttons == 2) {
+      oneOrTwo = <CardActions style={{ justifyContent: "center" }}>
+          <Button
+              style={{
+                maxWidth: "290px",
+                maxHeight: "60px",
+                minWidth: "280px",
+                minHeight: "60px",
+                fontSize: "24px"
+              }}
+              variant="contained"
+              color="secondary"
+              onClick={this.handleDroppedFirst}
+            >
+              Confirm Delivery
+            </Button>
+            </CardActions>
 
-    return (
+    } else if (buttons == 1) {
+
+      oneOrTwo =  <CardActions style={{ justifyContent: "center" }}>
+            <Button
+              style={{
+                maxWidth: "290px",
+                maxHeight: "60px",
+                minWidth: "280px",
+                minHeight: "60px",
+                fontSize: "24px"
+              }}
+              variant="contained"
+              color="secondary"
+              onClick={this.handleDroppedSecond}
+            >
+              Confirm Delivery
+            </Button>
+            </CardActions>
+    } else {
+        oneOrTwo =  <CardActions style={{ justifyContent: "center" }}>
+            <h4>No orders to drop</h4>
+        </CardActions>
+    }
+
+  return (
       <React.Fragment>
-        <div style={divStyle} dangerouslySetInnerHTML={{__html: this.state.items}}></div>
+        <div>
+            {oneOrTwo}
+        </div>
+        <div
+          style={divStyle}
+          dangerouslySetInnerHTML={{ __html: this.state.items }}
+        />
         <Map
           google={this.props.google}
           zoom={14}
           style={mapStyles}
           initialCenter={{
-          lat: 37.333911,
-          lng: -121.881848
+            lat: 37.333911,
+            lng: -121.881848
           }}
         >
           <Polyline
-              path={this.state.coords}
-              strokeColor="#2B60DE"
-              strokeOpacity={0.8}
-              strokeWeight={4}>
-          </Polyline>
-          <Marker onClick={this.onMarkerClick} name={this.state.destination_name} position={this.state.destination}/>
+            path={this.state.coords}
+            strokeColor="#2B60DE"
+            strokeOpacity={0.8}
+            strokeWeight={4}
+          />
+          <Marker
+            onClick={this.onMarkerClick}
+            name={this.state.destination_name}
+            position={this.state.destination}
+          />
           <InfoWindow
             marker={this.state.activeMarker}
             visible={this.state.showingInfoWindow}
@@ -147,6 +294,7 @@ export class MapContainer extends Component {
     );
   }
 }
+
 
 export default GoogleApiWrapper({
     apiKey: 'AIzaSyDBmKH8_o35KRFWmcke2WO8xddSSvzT_-8'
