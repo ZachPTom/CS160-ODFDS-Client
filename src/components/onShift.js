@@ -160,7 +160,7 @@ class orderBody extends React.Component{
 						window.localStorage.setItem('firstState', true);
 						this.setState({finalState: false});
 						this.setState({firstState: true});
-						this.props.history.push('/driver_dashboard')
+						this.props.history.push('/map2')
 					})
 					.catch(error => console.log(error));
 					}
@@ -244,7 +244,7 @@ class orderBody extends React.Component{
 				    variant="contained"
 				    color="primary"
 				    onClick={this.handlePicked}
-				    to="/driver_dashboard"
+				    to="/map2"
 				 >
 				    Order Picked
 				</Button>
