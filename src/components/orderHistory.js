@@ -140,7 +140,7 @@ class OrderHistory extends React.Component{
 					  <h1>ORDERS: </h1>
 				<Grid container spacing={8}>
 					<Grid item xs={12} sm={4}>
-						<h4>Completed Orders</h4>
+						<h4>Posted Orders</h4>
 			        	<List>
 				        	{this.state.s1.map(d => <ListItem data-id={d.id} key={d.id}>
 				        		<ListItemText primary={"Price: " + d.total_price + "\tAddress: " + d.address}/>
@@ -148,20 +148,20 @@ class OrderHistory extends React.Component{
 				     	</List>
 				    </Grid>
 				    <Grid item xs={12} sm={4}>
-				    	<h4>Posted Orders</h4>
+				    	<h4>Live Orders</h4>
 			        	<List>
-				        	{this.state.s3.map(d => <ListItem data-id={d.id} key={d.id}>
+				        	{this.state.s3.map(d => <ListItem data-id={d.id} key={d.id} button>
+				        		<Link to={'/orders/'+ d.id}>
 				        		<ListItemText primary={"Price: " + d.total_price + "\tAddress: " + d.address}/>
+				        		</Link>
 				        	</ListItem>)}
 				     	</List>
 				    </Grid>
 				    <Grid item xs={12} sm={4}>
-				    	<h4>Live Orders</h4>
+				    	<h4>Completed Orders</h4>
 			        	<List>
-				        	{this.state.s4.map(d => <ListItem data-id={d.id} key={d.id} button>
-				        		<Link to={'/orders/'+ d.id}>
+				        	{this.state.s4.map(d => <ListItem data-id={d.id} key={d.id}>
 				        		<ListItemText primary={"Price: " + d.total_price + "\tAddress: " + d.address}/>
-				        		</Link>
 				        	</ListItem>)}
 				     	</List>
 				    </Grid>

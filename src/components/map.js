@@ -9,7 +9,8 @@ export class MapContainer extends Component {
   state = {
     showingInfoWindow: false,
     activeMarker: {},
-    selectedPlace: {}
+    selectedPlace: {},
+    userToken: window.localStorage.getItem('token')
   };
 
   onMarkerClick = (props, marker, e) =>

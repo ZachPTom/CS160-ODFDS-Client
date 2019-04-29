@@ -143,6 +143,20 @@ class orderBody extends React.Component{
 		}
 	}
 
+	handleSkip = (e) => {
+		e.preventDefault();
+		if(this.state.secondState == 'true') {
+			console.log(this.state.secondState);
+			if(this.state.userToken) {
+				window.localStorage.setItem('secondState', 'false');
+				window.localStorage.setItem('finalState', 'true');
+				this.setState({secondState: 'false'});
+				this.setState({finalState: 'true'});
+				this.setState({selected2: ''})
+			}
+		}
+	}
+
 	handlePicked = (e) => {
 		e.preventDefault();
 		if(this.state.selected) {
@@ -153,10 +167,10 @@ class orderBody extends React.Component{
 		        var token = userTokenArr[1];
 		        console.log(userType);
 		        var order_ids = []
-		        if(this.state.selected) {
+		        if(this.state.selected !== '') {
 		        	order_ids.push(this.state.selected)
 		        }
-		        if(this.state.selected2) {
+		        if(this.state.selected2 !== '') {
 		        	order_ids.push(this.state.selected2)
 		        }
 		        if (order_ids.length !== 0) {
@@ -289,6 +303,22 @@ class orderBody extends React.Component{
 		              }}
 				 >
 				    Confirm
+				</Button>
+				<Button
+				    type="submit"
+				    fullWidth
+				    variant="contained"
+				    color="primary"
+				    onClick={this.handleSkip}
+				    style={{
+		                maxWidth: "140px",
+		                maxHeight: "50px",
+		                minWidth: "140px",
+		                minHeight: "50px",
+		                fontSize: "24px"
+		              }}
+				 >
+				    Skip
 				</Button>
 				</CardActions>
 		      </div>
