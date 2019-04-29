@@ -472,9 +472,9 @@ export class MapContainer extends Component {
         <div style={divStyle} dangerouslySetInnerHTML={{__html: this.state.items}}></div>
         </div>
           </CardActions>
-        {/* <div>
+        <div>
         {this.updateDriver()}
-        </div> */}
+        </div>
         <Map
           google={this.props.google}
           zoom={12}
