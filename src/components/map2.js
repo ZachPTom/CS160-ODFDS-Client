@@ -64,18 +64,6 @@ export class MapContainer extends Component {
         };
         this.startMove = this.startMove.bind(this);
         this.stopMove = this.stopMove.bind(this);
-
-    this.state = {
-      coords: [],
-      destination: {},
-      destination_name: "",
-      showingInfoWindow: true,
-      activeMarker: {},
-      selectedPlace: {},
-      items: "<h1> Directions </h1>",
-      userToken: window.localStorage.getItem("token"),
-      buttons: window.localStorage.getItem("buttons") || -1
-    };
   }
 
   onMarkerClick = (props, marker, e) =>
