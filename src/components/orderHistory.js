@@ -184,7 +184,7 @@ class OrderHistory extends React.Component {
               <Divider />
               {this.state.s3.map(d => (
                 <div>
-                  <ListItem data-id={d.id} key={d.id}>
+                  <ListItem data-id={d.id} key={d.id} button>
                     <Link to={"/orders/" + d.id}>
                       <ListItemText
                         primary={
@@ -215,7 +215,7 @@ class OrderHistory extends React.Component {
               <Divider />
               {this.state.s4.map(d => (
                 <div>
-                  <ListItem data-id={d.id} key={d.id} button>
+                  <ListItem data-id={d.id} key={d.id}>
                     <ListItemText
                       primary={
                         "Price: " + d.total_price + "\tAddress: " + d.address

@@ -10,7 +10,7 @@ export class MapContainer extends Component {
     showingInfoWindow: false,
     activeMarker: {},
     selectedPlace: {},
-    userToken: window.localStorage.getItem("token")
+    userToken: window.localStorage.getItem('token')
   };
 
   // onMarkerClick = (props, marker, e) =>
