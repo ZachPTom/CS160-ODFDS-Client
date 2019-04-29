@@ -181,7 +181,7 @@ export class MapContainer extends Component {
             second_id: 44 //window.localStorage.getItem("secondOrder")
           })
           .then(response => {
-              this.setState({start: response.data.driver})
+              this.setState({start: response.data.rest})
               this.setState({restaurant: response.data.rest})
               this.setState({first_destination: response.data.first})
               this.setState({second_destination: response.data.second})
