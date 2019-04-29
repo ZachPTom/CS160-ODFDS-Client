@@ -34,17 +34,17 @@ class App extends React.Component {
     }
   }
   componentDidMount() {
-    if(this.state.userToken){
+    if (this.state.userToken) {
       var userTokenArr = this.state.userToken.split(":");
       var userType = userTokenArr[0];
       var token = userTokenArr[1];
-      if(userType === 'restaurant') {
+      if (userType === "restaurant") {
         this.getPosts();
       } else {
-        this.props.history.push('/driver_dashboard')
+        this.props.history.push("/driver_dashboard");
       }
     } else {
-      this.props.history.push('/')
+      this.props.history.push("/");
     }
   }
   render() {
@@ -88,17 +88,6 @@ class App extends React.Component {
             >
               {"Location: " + this.state.restaurant.addressstr}
             </p>
-            <CardActions style={{ justifyContent: "center" }}>
-              <Button
-                align="center"
-                variant="outlined"
-                color="secondary"
-                component={Link}
-                to="/map2"
-              >
-                Directions
-              </Button>
-            </CardActions>
           </div>
         ) : (
           //     );

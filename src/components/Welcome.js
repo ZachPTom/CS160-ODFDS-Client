@@ -14,7 +14,7 @@ const divStyle = {
 };
 const headerStyle = {
   paddingTop: "190px",
-  color: "#FFFF99",
+  color: "#880044",
   fontSize: "120px",
   fontWeight: "normal",
   fontFamily: "roboto"
