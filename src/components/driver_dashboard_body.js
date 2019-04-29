@@ -5,12 +5,10 @@ import { Link } from "react-router-dom";
 import "typeface-roboto";
 
 const headerStyle = {
-  color: "#FFFF99",
+  color: "#880044",
   fontSize: "80px",
   fontWeight: "normal",
-  fontFamily: "roboto",
-  textShadow:
-    " -1px -1px 0 #000,   1px -1px 0 #000,  -1px 1px 0 #000, 1px 1px 0 #000 "
+  fontFamily: "roboto"
 };
 
 const HelloTest = () => {
@@ -76,7 +74,7 @@ const HelloTest = () => {
           component={Link}
           to="/map2"
         >
-          Restaurant Location
+          Directions
         </Button>
       </CardActions>
     </React.Fragment>
