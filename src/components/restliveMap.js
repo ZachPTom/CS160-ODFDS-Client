@@ -1,350 +1,491 @@
-// import React, { Component } from 'react';
-// import { Map, Polyline, InfoWindow, Marker, GoogleApiWrapper } from 'google-maps-react';
-// import Axios from 'axios';
-// import Button from "@material-ui/core/Button";
-// import CardActions from "@material-ui/core/CardActions";
 
-// const mapStyles = {
-//   width: '50%',
-//   height: '100%'
-// };
+import React, { Component } from "react";
+import {
+  Map,
+  Polyline,
+  InfoWindow,
+  Marker,
+  GoogleApiWrapper
+} from "google-maps-react";
+import Axios from "axios";
+import Button from "@material-ui/core/Button";
+import CardActions from "@material-ui/core/CardActions";
 
-// const divStyle = {
-//   float: 'right',
-//   width: '40%'
-// };
+//import Timer from './timer'
 
-// const buttonStyle = {
-//   float: 'right',
-//   width: '40%',
-//   zIndex: 1
+const mapStyles = {
+  width: "100%",
+  height: "100%"
+};
 
-// };
+const divStyle = {
+  float: 'right',
+  width: '50%'
+};
 
-// export class MapContainer extends Component {
-//     constructor(props) {
-//         super(props);
+const divStyle2 = {
+  display: 'flex',
+  justifyContent: 'center'
+}
+
+const buttonStyle = {
+  float: "right",
+  width: "40%",
+  zIndex: 1
+};
+
+export class RestLiveMap extends React.Component {
+
+    constructor(props) {
+        super(props);
     
-//         this.state = {
-//           coords: [],
-//           destination: {},
-//           destination_name: '',
-//           showingInfoWindow: true,
-//           activeMarker: {},
-//           selectedPlace: {},
-//           items: '<h1> Directions </h1>',
-//           userToken: window.localStorage.getItem('token'),
-//           buttons: window.localStorage.getItem('buttons') || -1
-//         };
-
-//     }
-
-//     onMarkerClick = (props, marker, e) =>
-//     this.setState({
-//       selectedPlace: props,
-//       activeMarker: marker,
-//       showingInfoWindow: true
-//     });
-
-//     onClose = props => {
-//       if (this.state.showingInfoWindow) {
-//         this.setState({
-//           showingInfoWindow: false,
-//           activeMarker: null
-//         });
-//       }
-//     };
-
-//     componentDidMount() {
-//       if(this.state.userToken){
-//         this.getOrderAddress();
-//         this.getDirections("37.333911,-121.881848", "37.348118,-121.899085");
-//         console.log(this.state.destination)
-//       } else {
-//         this.props.history.push('/')
-//       }
-//     }
-
-//     getOrderAddress() {
-//       if(this.state.userToken) {
-//         var userTokenArr = this.state.userToken.split(':');
-//         var userType = userTokenArr[0];
-//         var token = userTokenArr[1];
-//         Axios.post('http://127.0.0.1:8000/api/driver/r/order/', {
-//             "key": token
-//           })
-//           //test with: https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/posts.json
-//           .then(response => {
-//               this.setState({destination: response.address})
-//               console.log(response.address)
-//               console.log(this.state.destination)
-//           })
-//           .catch(error => {this.setState({ error, isLoading: false })
-//           console.log('ooga booga');})
-//       }
-//     }
-
-//     getDirections(startLoc, destinationLoc) {
-//       try {
-//           Axios.get(`https://maps.googleapis.com/maps/api/directions/json?origin=${ startLoc }&destination=${ destinationLoc }&key=AIzaSyDBmKH8_o35KRFWmcke2WO8xddSSvzT_-8`, 
-//           { mode: "no-cors",
-//             headers: {
-//             'Access-Control-Allow-Origin': '*',
-//             'Content-Type': 'application/json',
-//             },
-//             withCredentials: true,
-//             credentials: 'same-origin',}
-//           )
-//             .then(response => {
-//               //console.log(response)
-//               const elements = response.data.routes[0].legs[0].steps;
-//               for (const [index, value] of elements.entries()) {
-//                 this.state.items += '<p>' + value.html_instructions + '</p>'
-//               }
-//               //let dirs = response.data.routes[0].legs[0].steps[0].html_instructions;
-//               var polyline = require('@mapbox/polyline');
-//               let points = polyline.decode(response.data.routes[0].overview_polyline.points);
-//               let coords = points.map((point) => {
-//               return  {
-//                   lat: point[0],
-//                   lng: point[1]
-//               }
-//             });
-//           this.setState({coords: coords});
-//           this.setState({destination: response.data.routes[0].legs[0].end_location});
-//           this.setState({destination_name: response.data.routes[0].legs[0].end_address})
-//           //console.log(this.state.destination);
-//           return coords;
-//             })
-//       } catch(error) {
-//           console.log(error);
-//           //alert(error)
-//           return error;
-//       }
-//     }
-
-//     handleDroppedFirst = (e) => {
-//       e.preventDefault();
-//         if(this.state.userToken) {
-//           var userTokenArr = this.state.userToken.split(':');
-//               var userType = userTokenArr[0];
-//               var token = userTokenArr[1];
-//               console.log(userType);
-//               var order_id = window.localStorage.getItem('firstOrder')
-//               Axios.post('http://127.0.0.1:8000/api/driver/r/delivered/ ', {
-//                   key: token,
-//                   order_id: order_id
-//                  })
-//             .then(res => {
-//               console.log(res)
-//               if (this.state.buttons == 1) {
-//                 window.localStorage.removeItem('firstState')
-//                 window.localStorage.removeItem('secondState')
-//                 window.localStorage.removeItem('finalState')
-//                 window.localStorage.removeItem('lockState')
-//                 window.localStorage.removeItem('secondOrderList')
-//                 window.localStorage.removeItem('firstOrder')
-//                 window.localStorage.removeItem('secondOrder')
-//                 this.setState({buttons: 0});
-//                 window.localStorage.removeItem('buttons')
-//                 this.props.history.push('/driver_dashboard')
-//                 //alert("Order completed")
-//               } else {
-//                 this.setState({buttons: 1});
-//                 window.localStorage.setItem('buttons', 1)
-//                 alert("Order 1 completed")
-//               }
-//             })
-//             .catch(error => console.log(error));
-//       }
-//     }
-
-//     handleDroppedSecond = (e) => {
-//       e.preventDefault();
-//         if(this.state.userToken) {
-//           var userTokenArr = this.state.userToken.split(':');
-//               var userType = userTokenArr[0];
-//               var token = userTokenArr[1];
-//               console.log(userType);
-//               var order_id;
-//               if (window.localStorage.hasOwnProperty('secondOrder')) {
-//                 order_id = window.localStorage.getItem('secondOrder')
-//               } else {
-//                 order_id = window.localStorage.getItem('firstOrder')
-//               }
-//               Axios.post('http://127.0.0.1:8000/api/driver/r/delivered/ ', {
-//                   key: token,
-//                   order_id: order_id
-//                  })
-//             .then(res => {
-//                 console.log(res)
-//                 window.localStorage.removeItem('firstState')
-//                 window.localStorage.removeItem('secondState')
-//                 window.localStorage.removeItem('finalState')
-//                 window.localStorage.removeItem('lockState')
-//                 window.localStorage.removeItem('secondOrderList')
-//                 window.localStorage.removeItem('firstOrder')
-//                 window.localStorage.removeItem('secondOrder')
-//                 this.setState({buttons: 0});
-//                 window.localStorage.removeItem('buttons')
-//                 //alert("Order completed")
-//                 this.props.history.push('/driver_dashboard')
-//             })
-//             .catch(error => console.log(error));
-//       }
-//     }
-
-
-//   render() {
-//     // const triangleCoords = [
-//     //   {lat: 37.333911, lng: -121.881848},
-//     //   {lat: 37.333024, lng: -121.884756}
-//     // ];
-//     const buttons = this.state.buttons;
-//     let oneOrTwo;
-//     if (buttons == 2) {
-//       oneOrTwo = <CardActions style={{ justifyContent: "center" }}>
-//           <Button
-//               style={{
-//                 maxWidth: "290px",
-//                 maxHeight: "60px",
-//                 minWidth: "280px",
-//                 minHeight: "60px",
-//                 fontSize: "24px"
-//               }}
-//               variant="contained"
-//               color="secondary"
-//               onClick={this.handleDroppedFirst}
-//             >
-//               Confirm Delivery
-//             </Button>
-//             </CardActions>
-
-//     } else if (buttons == 1) {
-
-//       oneOrTwo =  <CardActions style={{ justifyContent: "center" }}>
-//             <Button
-//               style={{
-//                 maxWidth: "290px",
-//                 maxHeight: "60px",
-//                 minWidth: "280px",
-//                 minHeight: "60px",
-//                 fontSize: "24px"
-//               }}
-//               variant="contained"
-//               color="secondary"
-//               onClick={this.handleDroppedSecond}
-//             >
-//               Confirm Delivery
-//             </Button>
-//             </CardActions>
-//     } else {
-//         oneOrTwo =  <CardActions style={{ justifyContent: "center" }}>
-//             <h4>No orders to drop</h4>
-//         </CardActions>
-//     }
-
-//   return (
-//       <React.Fragment>
-//         <div>
-//             {oneOrTwo}
-//         </div>
-//         <div
-//           style={divStyle}
-//           dangerouslySetInnerHTML={{ __html: this.state.items }}
-//         />
-//         <Map
-//           google={this.props.google}
-//           zoom={14}
-//           style={mapStyles}
-//           initialCenter={{
-//             lat: 37.333911,
-//             lng: -121.881848
-//           }}
-//         >
-//           <Polyline
-//             path={this.state.coords}
-//             strokeColor="#2B60DE"
-//             strokeOpacity={0.8}
-//             strokeWeight={4}
-//           />
-//           <Marker
-//             onClick={this.onMarkerClick}
-//             name={this.state.destination_name}
-//             position={this.state.destination}
-//           />
-//           <InfoWindow
-//             marker={this.state.activeMarker}
-//             visible={this.state.showingInfoWindow}
-//             onClose={this.onClose}
-//           >
-//             <div>
-//               <h4>{this.state.selectedPlace.name}</h4>
-//             </div>
-//           </InfoWindow>
-//         </Map>
-//       </React.Fragment>
-//     );
-//   }
-// }
-
-
-// export default GoogleApiWrapper({
-//     apiKey: 'AIzaSyDBmKH8_o35KRFWmcke2WO8xddSSvzT_-8'
-//   })(MapContainer);
-//   
-
-import React from 'react';
-import axios from 'axios';
-
-class RestLiveMap extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = { order_id: '',
-     userToken: window.localStorage.getItem('token')};
-
-    //this.handleDelete = this.handleDelete.bind(this);
+        this.state = {
+          order_id: 0,
+          selected: '',
+          coords: [],
+          driverCoords: [],
+          coords2: [],
+          driverCoords2: [],
+          increment: 0,
+          start: [], //array parameters to pass to google api call
+          restaurant: [],
+          first_destination: [], 
+          first_destination_id: 0,
+          second_destination: [],
+          second_destination_id: 0,
+          final_destination: [],
+          start_destination_name: '', //strings to pass to marker name
+          first_destination_name: '',
+          final_destination_name: '',
+          start_destination_object: {}, //objects to pass to markers
+          first_destination_object: {},
+          final_destination_object: {},
+          second_destination_exists: false,
+          showingInfoWindow: true,
+          activeMarker: {},
+          selectedPlace: {},
+          currentIdx: 0,
+          currentPos: {}, //driver current pos
+          currentPosArray: [],
+          items: '<h1> Directions </h1>',
+          userToken: window.localStorage.getItem('token'),
+          buttons: window.localStorage.getItem('buttons') || -1
+        };
+        this.startMove = this.startMove.bind(this);
+        this.stopMove = this.stopMove.bind(this);
   }
 
-  componentDidMount() {
-    //const {match : {params}} = this.props;
-    if(this.state.userToken){
-      var userTokenArr = this.state.userToken.split(':');
-      var userType = userTokenArr[0];
-      var token = userTokenArr[1];
-      if(userType === 'restaurant') {
-        const { order_id } = this.props.match.params
-        console.log(order_id)
-        this.setState({ order_id: order_id });
-      } else {
-        this.props.history.push('/driver_dashboard')
-      }
-    } else {
-      this.props.history.push('/')
-    }
-    /*axios.get('/api/orders/${params.order_id}')
-      .then(({ data: order_id }) => {
-        //this.setState({ order_id: order_id });
-        console.log(order_id)
-      });*/
-  }
+  onMarkerClick = (props, marker, e) =>
+    this.setState({
+      selectedPlace: props,
+      activeMarker: marker,
+      showingInfoWindow: true
+    });
 
-  /*handleDelete() {
-    axios.delete('/api/users/1')
-      .then(() => {
-        console.log('user deleted');
+  onClose = props => {
+    if (this.state.showingInfoWindow) {
+      this.setState({
+        showingInfoWindow: false,
+        activeMarker: null
       });
-  }*/
+    }
+  };
+
+    calcNextPosition() {
+      if (this.state.currentIdx === this.state.pointsNo - 1)
+        this.setState({ currentIdx: 0 });
+      else
+      this.setState({ currentIdx: this.state.currentIdx + 1 }, function () {
+        if (this.state.increment >= this.state.driverCoords.length-1) {
+          this.setState({increment: 0})
+          var nextPos = this.state.driverCoords2[this.state.increment]
+        } else {
+          var nextPos = this.state.driverCoords[this.state.increment]
+        }
+        this.setState({increment: this.state.increment + 1})
+        if (this.state.increment > 3000) {
+          this.stopMove();
+        }
+        //{ lat: this.state.startPos.lat + (latDelta * this.state.currentIdx), lng: this.state.startPos.lng + (lngDelta * this.state.currentIdx) };
+        this.setState({ currentPos: nextPos });
+        this.setState({ currentPosArray: nextPos });
+        console.log(this.state.currentPos + 'current position')
+        console.log(this.state.currentPosArray + 'current position array')
+      });
+    }
+  
+    updatePosition() {
+      this.calcNextPosition();
+      console.log("Current position: " + JSON.stringify(this.state.currentPos));
+    }
+    
+  
+    startMove() {
+      this.interval = setInterval(this.updatePosition.bind(this), 530);
+    }
+  
+    stopMove() {
+      clearInterval(this.interval);
+    }
+
+    componentDidMount() {
+      if(this.state.userToken){
+        var userTokenArr = this.state.userToken.split(':');
+        var userType = userTokenArr[0];
+        var token = userTokenArr[1];
+        if(userType === 'restaurant') {
+          // const { order_id } = this.props.match.params
+          // console.log(order_id)
+          //this.getOrderAddress();
+          this.getDirections();
+        //this.updateDriver();
+          this.startMove();
+          console.log(this.state.destination)
+          console.log(this.state.coords + 'coords')
+        } else{
+          this.props.history.push('/driver_dashboard')
+        }
+      } else {
+        this.props.history.push("/");
+      }
+    }
+  
+
+    // getOrderAddress() {
+    //   if(this.state.userToken) {
+    //     var userTokenArr = this.state.userToken.split(':');
+    //     var userType = userTokenArr[0];
+    //     var token = userTokenArr[1];
+    //     Axios.post('http://127.0.0.1:8000/api/driver/r/order/', {
+    //         "key": 123
+    //       })
+    //       //test with: https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/posts.json
+    //       .then(response => {
+    //           this.setState({first_destination_id: response.data[0].id})
+    //           this.setState({second_destination_id: response.data[1].id})
+    //           console.log(response.data)
+    //           console.log(response.data[0].id)
+    //           console.log(response.data[1].id)
+    //           console.log(this.state.first_destination_id)
+    //           console.log(this.state.second_destination_id)
+    //           //console.log(response.data[1].id)  
+    //           return true
+    //       })
+    //       .catch(error => {this.setState({ error, isLoading: false })
+    //       console.log(error);
+    //       return false})
+    //   }
+    //   return false
+    // }
+  
+
+    getDirections() {
+      this.setState({ order_id: parseInt(this.props.match.params) });
+      if(this.state.userToken) {
+        var userTokenArr = this.state.userToken.split(':');
+        var userType = userTokenArr[0];
+        var token = userTokenArr[1];
+        Axios.post('http://127.0.0.1:8000/api/restaurant/r/route/', {
+            key: token,
+            order_id: this.state.order_id //window.localStorage.getItem("firstOrder"),
+            //second_id: 44 //window.localStorage.getItem("secondOrder")
+          })
+          .then(response => {
+              this.setState({start: response.data.rest})
+              this.setState({restaurant: response.data.rest})
+              this.setState({first_destination: response.data.first})
+              this.setState({second_destination: response.data.second})
+              if (response.data.second === undefined || response.data.second.length == 0) {
+                this.setState({final_destination: response.data.first})
+              } else {  
+                  this.setState({final_destination: response.data.second})
+                  this.setState({second_destination_exists: true})
+               } 
+              console.log(response.data)
+              console.log(this.state.start + ' driver start')
+              console.log(this.state.restaurant + ' restaurant location')
+              console.log(this.state.first_destination + ' first destination')
+              console.log(this.state.second_destination + ' second destination')
+              console.log(this.state.final_destination + ' final destination')
+
+              //console.log(this.state.destination.toString())
+
+            return Axios.get(`https://maps.googleapis.com/maps/api/directions/json?origin=${this.state.start.toString()}
+                &destination=${this.state.first_destination.toString()}&key=AIzaSyDBmKH8_o35KRFWmcke2WO8xddSSvzT_-8`, 
+          { mode: "no-cors",
+            headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+            },
+            withCredentials: true,
+            credentials: 'same-origin',}
+          )
+            .then(response => {
+              console.log(response)
+              const elements = response.data.routes[0].legs[0].steps;
+              for (const [index, value] of elements.entries()) {
+                this.state.items += '<p>' + value.html_instructions + '</p>'
+              }
+              //let dirs = response.data.routes[0].legs[0].steps[0].html_instructions;
+              var polyline = require('@mapbox/polyline');
+              let points = polyline.decode(response.data.routes[0].overview_polyline.points);
+              let coords = points.map((point) => {
+              return  {
+                  lat: point[0],
+                  lng: point[1]
+              }
+            });
+          this.setState({coords: coords});
+          console.log(this.state.coords + 'coords')
+          //this.setState({first})
+          // this.setState({first_destination_object: this.toObject(this.state.first_destination)});
+          // console.log(this.state.first_destination_object)
+          this.setState({start_destination_object: response.data.routes[0].legs[0].start_location});
+          //this.setState({currentPos: response.data.routes[0].legs[0].start_location})
+          //this.setState({currentPosArray: response.data.routes[0].legs[0].start_location})
+          this.setState({start_destination_name: response.data.routes[0].legs[0].start_address});
+          this.setState({first_destination_object: response.data.routes[0].legs[0].end_location});
+          //console.log(this.state.destination_object)
+          this.setState({first_destination_name: response.data.routes[0].legs[0].end_address})
+          //console.log(this.state.destination);
+          // return coords;
+          
+          if (this.state.second_destination_exists) {
+          return Axios.get(`https://maps.googleapis.com/maps/api/directions/json?origin=${this.state.first_destination.toString()}
+          &destination=${this.state.second_destination.toString()}&key=AIzaSyDBmKH8_o35KRFWmcke2WO8xddSSvzT_-8`, 
+          { mode: "no-cors",
+            headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+            },
+            withCredentials: true,
+            credentials: 'same-origin',}
+          )
+            .then(response => {
+              console.log(response)
+              const elements = response.data.routes[0].legs[0].steps;
+              for (const [index, value] of elements.entries()) {
+                this.state.items += '<p>' + value.html_instructions + '</p>'
+              }
+              //let dirs = response.data.routes[0].legs[0].steps[0].html_instructions;
+              var polyline = require('@mapbox/polyline');
+              let points = polyline.decode(response.data.routes[0].overview_polyline.points);
+              let coords = points.map((point) => {
+              return  {
+                  lat: point[0],
+                  lng: point[1]
+              }
+            });
+          this.setState({coords2: coords});
+          //this.setState({driverCoords2: coords});
+          //this.setState({coords: coords});
+          //this.setState({first})
+          // this.setState({first_destination_object: this.toObject(this.state.first_destination)});
+          // console.log(this.state.first_destination_object)
+          // this.setState({first_destination_object: response.data.routes[0].legs[0].start_location});
+          // this.setState({first_destination_name: response.data.routes[0].legs[0].start_address});
+          this.setState({final_destination_object: response.data.routes[0].legs[0].end_location});
+          //console.log(this.state.destination_object)
+          this.setState({final_destination_name: response.data.routes[0].legs[0].end_address})
+          //console.log(this.state.destination);
+          this.updateDriver();
+          return coords;
+            })
+          .catch(error => {
+          console.log(error);
+          //alert(error)
+          return error;
+            })
+          }
+            })
+          .catch(error => {
+          console.log(error);
+          //alert(error)
+          return error;
+      })
+          })
+          .catch(error => {this.setState({ error, isLoading: false })
+          console.log(error);
+      })
+    }
+  }
+      // this.setState({selected: window.localStorage.getItem('firstOrder')})
+      // this.setState({destination: this.state.selected.address})
+      // console.log(window.localStorage.getItem('firstOrder'))
+      // console.log(this.state.selected)
+      // console.log(this.state.destination)
+
+  // handleDroppedFirst = e => {
+  //   e.preventDefault();
+  //   if (this.state.userToken) {
+  //     var userTokenArr = this.state.userToken.split(":");
+  //     var userType = userTokenArr[0];
+  //     var token = userTokenArr[1];
+  //     console.log(userType);
+  //     var order_id = window.localStorage.getItem("firstOrder");
+  //     Axios.post("http://127.0.0.1:8000/api/driver/r/delivered/ ", {
+  //       key: token,
+  //       order_id: order_id
+  //     })
+  //       .then(res => {
+  //         console.log(res);
+  //         if (this.state.buttons == 1) {
+  //           window.localStorage.removeItem("firstState");
+  //           window.localStorage.removeItem("secondState");
+  //           window.localStorage.removeItem("finalState");
+  //           window.localStorage.removeItem("lockState");
+  //           window.localStorage.removeItem("secondOrderList");
+  //           window.localStorage.removeItem("firstOrder");
+  //           window.localStorage.removeItem("secondOrder");
+  //           this.setState({ buttons: 0 });
+  //           window.localStorage.removeItem("buttons");
+  //           this.props.history.push("/driver_dashboard");
+  //           //alert("Order completed")
+  //         } else {
+  //           this.setState({ buttons: 1 });
+  //           window.localStorage.setItem("buttons", 1);
+  //           alert("Order 1 completed");
+  //         }
+  //       })
+  //       .catch(error => console.log(error));
+  //   }
+  // };
+
+  // handleDroppedSecond = e => {
+  //   e.preventDefault();
+  //   if (this.state.userToken) {
+  //     var userTokenArr = this.state.userToken.split(":");
+  //     var userType = userTokenArr[0];
+  //     var token = userTokenArr[1];
+  //     console.log(userType);
+  //     var order_id;
+  //     if (window.localStorage.hasOwnProperty("secondOrder")) {
+  //       order_id = window.localStorage.getItem("secondOrder");
+  //     } else {
+  //       order_id = window.localStorage.getItem("firstOrder");
+  //     }
+  //     Axios.post("http://127.0.0.1:8000/api/driver/r/delivered/ ", {
+  //       key: token,
+  //       order_id: order_id
+  //     })
+  //       .then(res => {
+  //         console.log(res);
+  //         window.localStorage.removeItem("firstState");
+  //         window.localStorage.removeItem("secondState");
+  //         window.localStorage.removeItem("finalState");
+  //         window.localStorage.removeItem("lockState");
+  //         window.localStorage.removeItem("secondOrderList");
+  //         window.localStorage.removeItem("firstOrder");
+  //         window.localStorage.removeItem("secondOrder");
+  //         this.setState({ buttons: 0 });
+  //         window.localStorage.removeItem("buttons");
+  //         //alert("Order completed")
+  //         this.props.history.push("/driver_dashboard");
+  //       })
+  //       .catch(error => console.log(error));
+  //   }
+  // };
+
+  updateDriver() {
+    if (this.state.userToken) {
+      var userTokenArr = this.state.userToken.split(":");
+      var token = userTokenArr[1];
+    Axios.post('http://127.0.0.1:8000/api/restaurant/r/route/', {
+      key: token,
+      order_id: this.state.order_id //this.state.currentPos
+    })
+    .then(res => {
+      console.log(res)
+      this.setState({currentPos: res.data.driver})
+      return Axios.get(`https://maps.googleapis.com/maps/api/directions/json?origin=${res.data.driver.toString()}
+                &destination=${this.state.final_destination.toString()}&key=AIzaSyDBmKH8_o35KRFWmcke2WO8xddSSvzT_-8`, 
+          { mode: "no-cors",
+            headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+            },
+            withCredentials: true,
+            credentials: 'same-origin',}
+          )
+          .then(response => {
+            //let dirs = response.data.routes[0].legs[0].steps[0].html_instructions;
+            var polyline = require('@mapbox/polyline');
+            let points = polyline.decode(response.data.routes[0].overview_polyline.points);
+            let coords = points.map((point) => {
+            return  {
+                lat: point[0],
+                lng: point[1]
+            }
+          });
+          this.setState({driverCoords: coords});
+          console.log('driverCoords: ' + this.state.driverCoords)
+          })
+          .catch(error => console.log(error));
+    })
+    .catch(error => console.log(error));
+    }
+  }
 
   render() {
+    // const triangleCoords = [
+    //   {lat: 37.333911, lng: -121.881848},
+    //   {lat: 37.333024, lng: -121.884756}
+    // ];
+    let iconMarker = new window.google.maps.MarkerImage(
+      "https://lh3.googleusercontent.com/bECXZ2YW3j0yIEBVo92ECVqlnlbX9ldYNGrCe0Kr4VGPq-vJ9Xncwvl16uvosukVXPfV=w300",
+      null, /* size is determined at runtime */
+      null, /* origin is 0,0 */
+      null, /* anchor is bottom center of the scaled image */
+      new window.google.maps.Size(32, 32)
+    );
+
+    //let updateDriver;
 
     return (
-        <div>
-          <h2>order: {this.state.order_id}</h2>
-        </div>
+      <React.Fragment>
+        <Map
+          google={this.props.google}
+          zoom={14}
+          style={mapStyles}
+          initialCenter={{
+            lat: 37.333911,
+            lng: -121.881848
+          }}
+        >
+          <Polyline
+              path={this.state.coords}
+              strokeColor="#2B60DE"
+              strokeOpacity={0.8}
+              strokeWeight={4}>
+          </Polyline>
+          <Polyline
+              path={this.state.coords2}
+              strokeColor="#2B60DE"
+              strokeOpacity={0.8}
+              strokeWeight={4}>
+          </Polyline>
+          <Marker icon={iconMarker} onClick={this.onMarkerClick} name={'driver'} position={this.state.currentPos}/>
+          {/* <Marker onClick={this.onMarkerClick} name={'start: ' + this.state.start_destination_name} position={this.state.start_destination_object}/> */}
+          <Marker onClick={this.onMarkerClick} name={'first destination: ' + this.state.first_destination_name} position={this.state.first_destination_object}/>
+          <Marker onClick={this.onMarkerClick} name={'final destination: ' + this.state.final_destination_name} position={this.state.final_destination_object}/>
+          <InfoWindow
+            marker={this.state.activeMarker}
+            visible={this.state.showingInfoWindow}
+            onClose={this.onClose}
+          >
+            <div>
+              <h4>{this.state.selectedPlace.name}</h4>
+            </div>
+          </InfoWindow>
+        </Map>
+        {/* <div>
+        {this.updateDriver()}
+        </div> */}
+      </React.Fragment>
     );
   }
 }
 
-export default RestLiveMap;
+export default GoogleApiWrapper({
+  apiKey: "AIzaSyDBmKH8_o35KRFWmcke2WO8xddSSvzT_-8"
+})(RestLiveMap);

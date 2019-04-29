@@ -18,8 +18,8 @@ const mapStyles = {
 };
 
 const divStyle = {
-  float: 'right',
-  width: '50%'
+  width: '80%',
+  justifyContent: 'center'
 };
 
 const divStyle2 = {
@@ -176,9 +176,9 @@ export class MapContainer extends Component {
         var userType = userTokenArr[0];
         var token = userTokenArr[1];
         Axios.post('http://127.0.0.1:8000/api/driver/r/route/', {
-            key: 123,
-            first_id: 43, //window.localStorage.getItem("firstOrder"),
-            second_id: 44 //window.localStorage.getItem("secondOrder")
+            key: token,
+            first_id: window.localStorage.getItem("firstOrder"),
+            second_id: window.localStorage.getItem("secondOrder")
           })
           .then(response => {
               this.setState({start: response.data.rest})
@@ -459,29 +459,26 @@ export class MapContainer extends Component {
       <div>
         {oneOrTwo}
       </div>
+      <CardActions
+            style={{
+              justifyContent: "center",
+              paddingTop: "45px",
+              marginLeft: "auto",
+              marginRight: "auto",
+              width: "60%",
+              float: 'right'
+            }}
+          >
         <div>
+        <div style={divStyle} dangerouslySetInnerHTML={{__html: this.state.items}}></div>
+        </div>
+          </CardActions>
+        {/* <div>
         {this.updateDriver()}
-        </div>
-        <div style={divStyle}>
-        <div style={divStyle2} dangerouslySetInnerHTML={{__html: this.state.items}}></div>
-        {/* <Button
-          type = 'submit'
-				    fullWidth
-				    variant="contained"
-				    color="primary"
-          onClick={this.startMove}> Start
-        </Button>
-        <Button
-          type = 'submit'
-				    fullWidth
-				    variant="contained"
-				    color="primary"
-          onClick={this.stopMove}> Stop
-        </Button> */}
-        </div>
+        </div> */}
         <Map
           google={this.props.google}
-          zoom={14}
+          zoom={12}
           style={mapStyles}
           initialCenter={{
             lat: 37.333911,

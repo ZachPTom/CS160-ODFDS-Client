@@ -40,7 +40,9 @@ export class MapContainer extends Component {
         this.state = {
           selected: '',
           coords: [],
+          driverCoords: [],
           coords2: [],
+          driverCoords2: [],
           increment: 0,
           start: [], //array parameters to pass to google api call
           restaurant: [],
@@ -90,18 +92,23 @@ export class MapContainer extends Component {
       if (this.state.currentIdx === this.state.pointsNo - 1)
         this.setState({ currentIdx: 0 });
       else
-        this.setState({ currentIdx: this.state.currentIdx + 1 }, function () {
-          var nextPos = this.state.coords[this.state.increment]
-          this.setState({increment: this.state.increment + 1})
-          if (this.state.increment > 1000) {
-            this.stopMove();
-          }
-          //{ lat: this.state.startPos.lat + (latDelta * this.state.currentIdx), lng: this.state.startPos.lng + (lngDelta * this.state.currentIdx) };
-          this.setState({ currentPos: nextPos });
-          this.setState({ currentPosArray: nextPos });
-          console.log(this.state.currentPos + 'current position')
-          console.log(this.state.currentPosArray + 'current position array')
-        });
+      this.setState({ currentIdx: this.state.currentIdx + 1 }, function () {
+        if (this.state.increment >= this.state.driverCoords.length-1) {
+          this.setState({increment: 0})
+          var nextPos = this.state.driverCoords2[this.state.increment]
+        } else {
+          var nextPos = this.state.driverCoords[this.state.increment]
+        }
+        this.setState({increment: this.state.increment + 1})
+        if (this.state.increment > 3000) {
+          this.stopMove();
+        }
+        //{ lat: this.state.startPos.lat + (latDelta * this.state.currentIdx), lng: this.state.startPos.lng + (lngDelta * this.state.currentIdx) };
+        this.setState({ currentPos: nextPos });
+        this.setState({ currentPosArray: nextPos });
+        console.log(this.state.currentPos + 'current position')
+        console.log(this.state.currentPosArray + 'current position array')
+      });
     }
   
     updatePosition() {
@@ -111,7 +118,7 @@ export class MapContainer extends Component {
     
   
     startMove() {
-      this.interval = setInterval(this.updatePosition.bind(this), 500);
+      this.interval = setInterval(this.updatePosition.bind(this), 530);
     }
   
     stopMove() {
@@ -126,7 +133,8 @@ export class MapContainer extends Component {
         if(userType === 'restaurant') {
           //this.getOrderAddress();
         this.getDirections();
-        //this.startMove();
+        //this.updateDriver();
+        this.startMove();
           console.log(this.state.destination)
           console.log(this.state.coords + 'coords')
         } else{
@@ -172,12 +180,12 @@ export class MapContainer extends Component {
         var userType = userTokenArr[0];
         var token = userTokenArr[1];
         Axios.post('http://127.0.0.1:8000/api/restaurant/r/route/', {
-            key: 123,
-            order_id: 43 //window.localStorage.getItem("firstOrder"),
+            key: token,
+            order_id: 52 //window.localStorage.getItem("firstOrder"),
             //second_id: 44 //window.localStorage.getItem("secondOrder")
           })
           .then(response => {
-              this.setState({start: response.data.driver})
+              this.setState({start: response.data.rest})
               this.setState({restaurant: response.data.rest})
               this.setState({first_destination: response.data.first})
               this.setState({second_destination: response.data.second})
@@ -250,9 +258,9 @@ export class MapContainer extends Component {
             .then(response => {
               console.log(response)
               const elements = response.data.routes[0].legs[0].steps;
-              // for (const [index, value] of elements.entries()) {
-              //   this.state.items += '<p>' + value.html_instructions + '</p>'
-              // }
+              for (const [index, value] of elements.entries()) {
+                this.state.items += '<p>' + value.html_instructions + '</p>'
+              }
               //let dirs = response.data.routes[0].legs[0].steps[0].html_instructions;
               var polyline = require('@mapbox/polyline');
               let points = polyline.decode(response.data.routes[0].overview_polyline.points);
@@ -263,6 +271,7 @@ export class MapContainer extends Component {
               }
             });
           this.setState({coords2: coords});
+          //this.setState({driverCoords2: coords});
           //this.setState({coords: coords});
           //this.setState({first})
           // this.setState({first_destination_object: this.toObject(this.state.first_destination)});
@@ -273,6 +282,7 @@ export class MapContainer extends Component {
           //console.log(this.state.destination_object)
           this.setState({final_destination_name: response.data.routes[0].legs[0].end_address})
           //console.log(this.state.destination);
+          this.updateDriver();
           return coords;
             })
           .catch(error => {
@@ -375,12 +385,36 @@ export class MapContainer extends Component {
       var userTokenArr = this.state.userToken.split(":");
       var token = userTokenArr[1];
     Axios.post('http://127.0.0.1:8000/api/restaurant/r/route/', {
-      key: 123,
-      order_id: 43 //this.state.currentPos
+      key: token,
+      order_id: 52 //this.state.currentPos
     })
     .then(res => {
       console.log(res)
       this.setState({currentPos: res.data.driver})
+      return Axios.get(`https://maps.googleapis.com/maps/api/directions/json?origin=${res.data.driver.toString()}
+                &destination=${this.state.final_destination.toString()}&key=AIzaSyDBmKH8_o35KRFWmcke2WO8xddSSvzT_-8`, 
+          { mode: "no-cors",
+            headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+            },
+            withCredentials: true,
+            credentials: 'same-origin',}
+          )
+          .then(response => {
+            //let dirs = response.data.routes[0].legs[0].steps[0].html_instructions;
+            var polyline = require('@mapbox/polyline');
+            let points = polyline.decode(response.data.routes[0].overview_polyline.points);
+            let coords = points.map((point) => {
+            return  {
+                lat: point[0],
+                lng: point[1]
+            }
+          });
+          this.setState({driverCoords: coords});
+          console.log('driverCoords: ' + this.state.driverCoords)
+          })
+          .catch(error => console.log(error));
     })
     .catch(error => console.log(error));
     }
@@ -401,59 +435,8 @@ export class MapContainer extends Component {
 
     //let updateDriver;
 
-    const buttons = this.state.buttons;
-    let oneOrTwo;
-    if (buttons == 2) {
-      oneOrTwo = (
-        <CardActions style={{ justifyContent: "center" }}>
-          <Button
-            style={{
-              maxWidth: "290px",
-              maxHeight: "60px",
-              minWidth: "280px",
-              minHeight: "60px",
-              fontSize: "24px"
-            }}
-            variant="contained"
-            color="secondary"
-            onClick={this.handleDroppedFirst}
-          >
-            Confirm Delivery
-          </Button>
-        </CardActions>
-      );
-    } else if (buttons == 1) {
-      oneOrTwo = (
-        <CardActions style={{ justifyContent: "center" }}>
-          <Button
-            style={{
-              maxWidth: "290px",
-              maxHeight: "60px",
-              minWidth: "280px",
-              minHeight: "60px",
-              fontSize: "24px"
-            }}
-            variant="contained"
-            color="secondary"
-            onClick={this.handleDroppedSecond}
-          >
-            Confirm Delivery
-          </Button>
-        </CardActions>
-      );
-    } else {
-      oneOrTwo = (
-        <CardActions style={{ justifyContent: "center" }}>
-          <h4>No orders to drop</h4>
-        </CardActions>
-      );
-    }
-
     return (
       <React.Fragment>
-        <div>
-        {this.updateDriver()}
-        </div>
         <Map
           google={this.props.google}
           zoom={14}
@@ -489,6 +472,9 @@ export class MapContainer extends Component {
             </div>
           </InfoWindow>
         </Map>
+        {/* <div>
+        {this.updateDriver()}
+        </div> */}
       </React.Fragment>
     );
   }
