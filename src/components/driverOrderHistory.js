@@ -98,7 +98,7 @@ class OrderHistory extends React.Component {
                 <ListItem data-id={d.id} key={d.id}>
                   <ListItemText
                     primary={
-                      "Order ID: " + d.id + " Price: " + d.total_price + " \tTime: " + d.time
+                      "Order ID: " + d.id + " • Item Price: $" + d.food_price + " • Delivery Fee: $" + d.total_price + " • \tTime: " + d.time
                     }
                   />
                 </ListItem>
