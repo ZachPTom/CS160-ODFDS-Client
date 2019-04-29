@@ -14,8 +14,12 @@ export class Directions extends Component {
   componentDidMount() {
     // find your origin and destination point coordinates and pass it to our method.
     // I am using Bursa,TR -> Istanbul,TR for this example
-    this.getDirections("40.1884979, 29.061018", "41.0082, 28.9784")
-    this.map = this.props.maps.Map;
+    if(this.state.userToken){
+      this.getDirections("40.1884979, 29.061018", "41.0082, 28.9784")
+      this.map = this.props.maps.Map;
+    } else {
+      this.props.history.push('/')
+    }
   }
 
   async getDirections(startLoc, destinationLoc) {

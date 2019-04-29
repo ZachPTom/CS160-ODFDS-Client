@@ -19,23 +19,35 @@ export class CurrentLocation extends React.Component {
         lat: lat,
         lng: lng
       }, 
-      coords: []
+      coords: [],
+      userToken: window.localStorage.getItem('token')
     };
   }
 
   componentDidMount() {
-    if (this.props.centerAroundCurrentLocation) {
-      if (navigator && navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(pos => {
-          const coords = pos.coords;
-          this.setState({
-            currentLocation: {
-              lat: coords.latitude,
-              lng: coords.longitude
-            }
-          });
-        });
-      }
+    if(this.state.userToken){
+      var userTokenArr = this.state.userToken.split(':');
+      var userType = userTokenArr[0];
+      var token = userTokenArr[1];
+      //if(userType === 'driver') {
+        if (this.props.centerAroundCurrentLocation) {
+          if (navigator && navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(pos => {
+              const coords = pos.coords;
+              this.setState({
+                currentLocation: {
+                  lat: coords.latitude,
+                  lng: coords.longitude
+                }
+              });
+            });
+          }
+        }
+      //} else{
+          //this.props.history.push('/rest_dashboard')
+      //}
+    //} else {
+      //this.props.history.push('/')
     }
     //this.getDirections("37.333911,-121.881848", "37.333024, -121.884756");
     this.loadMap();

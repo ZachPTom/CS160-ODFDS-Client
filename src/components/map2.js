@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Map, Polyline, InfoWindow, Marker, GoogleApiWrapper } from 'google-maps-react';
 import Axios from 'axios';
-import ReactDOM from 'react-dom';
 import Button from "@material-ui/core/Button";
+import CardActions from "@material-ui/core/CardActions";
 
 //import Timer from './timer'
 
@@ -14,6 +14,13 @@ const mapStyles = {
 const divStyle = {
   float: 'right',
   width: '40%'
+};
+
+const buttonStyle = {
+  float: 'right',
+  width: '40%',
+  zIndex: 1
+
 };
 
 export class MapContainer extends Component {
@@ -43,7 +50,8 @@ export class MapContainer extends Component {
           currentIdx: 0,
           currentPos: {}, //driver current pos
           items: '<h1> Directions </h1>',
-          userToken: window.localStorage.getItem('token')
+          userToken: window.localStorage.getItem('token'),
+          buttons: window.localStorage.getItem('buttons') || -1
         };
         this.startMove = this.startMove.bind(this);
         this.stopMove = this.stopMove.bind(this);
@@ -93,7 +101,20 @@ export class MapContainer extends Component {
     }
 
     componentDidMount() {
+      if(this.state.userToken){
+        var userTokenArr = this.state.userToken.split(':');
+        var userType = userTokenArr[0];
+        var token = userTokenArr[1];
+        if(userType === 'driver') {
+          this.getOrderAddress();
         this.getDirections();
+          console.log(this.state.destination)
+        } else{
+          this.props.history.push('/rest_dashboard')
+        }
+      } else {
+        this.props.history.push('/')
+      }
     }
 
     // getOrderAddress() {
@@ -248,32 +269,132 @@ export class MapContainer extends Component {
       // console.log(this.state.selected)
       // console.log(this.state.destination)
 
-      
-  }
+    handleDroppedFirst = (e) => {
+      e.preventDefault();
+        if(this.state.userToken) {
+          var userTokenArr = this.state.userToken.split(':');
+              var userType = userTokenArr[0];
+              var token = userTokenArr[1];
+              console.log(userType);
+              var order_id = window.localStorage.getItem('firstOrder')
+              Axios.post('http://127.0.0.1:8000/api/driver/r/delivered/ ', {
+                  key: token,
+                  order_id: order_id
+                 })
+            .then(res => {
+              console.log(res)
+              if (this.state.buttons == 1) {
+                window.localStorage.removeItem('firstState')
+                window.localStorage.removeItem('secondState')
+                window.localStorage.removeItem('finalState')
+                window.localStorage.removeItem('lockState')
+                window.localStorage.removeItem('secondOrderList')
+                window.localStorage.removeItem('firstOrder')
+                window.localStorage.removeItem('secondOrder')
+                this.setState({buttons: 0});
+                window.localStorage.removeItem('buttons')
+                this.props.history.push('/driver_dashboard')
+                //alert("Order completed")
+              } else {
+                this.setState({buttons: 1});
+                window.localStorage.setItem('buttons', 1)
+                alert("Order 1 completed")
+              }
+            })
+            .catch(error => console.log(error));
+      }
+    }
 
-  // toObject(arr) {
-  //   var obj = {};
-  //   for (var i = 0; i < arr.length; ++i)
-  //     if (arr[i] !== undefined) obj[i] = arr[i];
-  //   return obj;
-  // }
+    handleDroppedSecond = (e) => {
+      e.preventDefault();
+        if(this.state.userToken) {
+          var userTokenArr = this.state.userToken.split(':');
+              var userType = userTokenArr[0];
+              var token = userTokenArr[1];
+              console.log(userType);
+              var order_id;
+              if (window.localStorage.hasOwnProperty('secondOrder')) {
+                order_id = window.localStorage.getItem('secondOrder')
+              } else {
+                order_id = window.localStorage.getItem('firstOrder')
+              }
+              Axios.post('http://127.0.0.1:8000/api/driver/r/delivered/ ', {
+                  key: token,
+                  order_id: order_id
+                 })
+            .then(res => {
+                console.log(res)
+                window.localStorage.removeItem('firstState')
+                window.localStorage.removeItem('secondState')
+                window.localStorage.removeItem('finalState')
+                window.localStorage.removeItem('lockState')
+                window.localStorage.removeItem('secondOrderList')
+                window.localStorage.removeItem('firstOrder')
+                window.localStorage.removeItem('secondOrder')
+                this.setState({buttons: 0});
+                window.localStorage.removeItem('buttons')
+                //alert("Order completed")
+                this.props.history.push('/driver_dashboard')
+            })
+            .catch(error => console.log(error));
+      }
+    }
 
-  // updateDriver = (
-  //   //timer
-
-  //   //this.setState({driverLocation:  })
-  // )
 
   render() {
     // const triangleCoords = [
     //   {lat: 37.333911, lng: -121.881848},
     //   {lat: 37.333024, lng: -121.884756}
     // ];
-    //this.getOrderAddress();
+    const buttons = this.state.buttons;
+    let oneOrTwo;
+    if (buttons == 2) {
+      oneOrTwo = <CardActions style={{ justifyContent: "center" }}>
+          <Button
+              style={{
+                maxWidth: "290px",
+                maxHeight: "60px",
+                minWidth: "280px",
+                minHeight: "60px",
+                fontSize: "24px"
+              }}
+              variant="contained"
+              color="secondary"
+              onClick={this.handleDroppedFirst}
+            >
+              Confirm Delivery
+            </Button>
+            </CardActions>
 
-    console.log(this.state.coords)
-    return (
+    } else if (buttons == 1) {
+
+      oneOrTwo =  <CardActions style={{ justifyContent: "center" }}>
+            <Button
+              style={{
+                maxWidth: "290px",
+                maxHeight: "60px",
+                minWidth: "280px",
+                minHeight: "60px",
+                fontSize: "24px"
+              }}
+              variant="contained"
+              color="secondary"
+              onClick={this.handleDroppedSecond}
+            >
+              Confirm Delivery
+            </Button>
+            </CardActions>
+    } else {
+        oneOrTwo =  <CardActions style={{ justifyContent: "center" }}>
+            <h4>No orders to drop</h4>
+        </CardActions>
+    }
+
+  return (
       <React.Fragment>
+        <div>
+            {oneOrTwo}
+        </div>
         {/* <div style={divStyle} dangerouslySetInnerHTML={{__html: this.state.items}}></div> */}
         <Button
           type = 'submit'
@@ -294,8 +415,8 @@ export class MapContainer extends Component {
           zoom={14}
           style={mapStyles}
           initialCenter={{
-          lat: 37.333911,
-          lng: -121.881848
+            lat: 37.333911,
+            lng: -121.881848
           }}
         >
           <Polyline
@@ -328,6 +449,7 @@ export class MapContainer extends Component {
     );
   }
 }
+
 
 export default GoogleApiWrapper({
     apiKey: 'AIzaSyDBmKH8_o35KRFWmcke2WO8xddSSvzT_-8'

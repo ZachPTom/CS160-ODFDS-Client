@@ -11,19 +11,29 @@ class driver_dashboard extends React.Component {
 
   componentDidMount() {
     if (this.state.userToken) {
-      var userTokenArr = this.state.userToken.split(":");
+      var userTokenArr = this.state.userToken.split(':');
       var userType = userTokenArr[0];
       var token = userTokenArr[1];
-      axios
-        .post("http://127.0.0.1:8000/api/driver/r/dashboard/", {
-          key: token
-        })
-        .then(res => {
-          this.setState({
-            driver: res.data
+      if(userType === 'driver') {
+        var userTokenArr = this.state.userToken.split(":");
+        var userType = userTokenArr[0];
+        var token = userTokenArr[1];
+        axios
+          .post("http://127.0.0.1:8000/api/driver/r/dashboard/", {
+            key: token
+          })
+          .then(res => {
+            this.setState({
+              driver: res.data
+            });
+            console.log(res);
           });
-          console.log(res);
-        });
+        }
+        else{
+          this.props.history.push('/rest_dashboard')
+        }
+    } else {
+      this.props.history.push('/')
     }
   }
 

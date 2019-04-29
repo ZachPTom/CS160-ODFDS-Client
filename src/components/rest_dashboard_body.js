@@ -44,7 +44,7 @@ const RestHeader = () => {
           variant="contained"
           color="secondary"
           component={Link}
-          to="/orderHistory"
+          to="/orders"
           size="large"
         >
           Order History
