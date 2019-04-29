@@ -227,8 +227,8 @@ export class MapContainer extends Component {
           // this.setState({first_destination_object: this.toObject(this.state.first_destination)});
           // console.log(this.state.first_destination_object)
           this.setState({start_destination_object: response.data.routes[0].legs[0].start_location});
-          this.setState({currentPos: response.data.routes[0].legs[0].start_location})
-          this.setState({currentPosArray: response.data.routes[0].legs[0].start_location})
+          //this.setState({currentPos: response.data.routes[0].legs[0].start_location})
+          //this.setState({currentPosArray: response.data.routes[0].legs[0].start_location})
           this.setState({start_destination_name: response.data.routes[0].legs[0].start_address});
           this.setState({first_destination_object: response.data.routes[0].legs[0].end_location});
           //console.log(this.state.destination_object)
