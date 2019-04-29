@@ -23,7 +23,8 @@ const divStyle = {
 };
 
 const divStyle2 = {
-  float: 'center'
+  display: 'flex',
+  justifyContent: 'center'
 }
 
 const buttonStyle = {
@@ -44,7 +45,9 @@ export class MapContainer extends Component {
           start: [], //array parameters to pass to google api call
           restaurant: [],
           first_destination: [], 
+          first_destination_id: 0,
           second_destination: [],
+          second_destination_id: 0,
           final_destination: [],
           start_destination_name: '', //strings to pass to marker name
           first_destination_name: '',
@@ -89,6 +92,9 @@ export class MapContainer extends Component {
         this.setState({ currentIdx: this.state.currentIdx + 1 }, function () {
           var nextPos = this.state.coords[this.state.increment]
           this.setState({increment: this.state.increment + 1})
+          if (this.state.increment > 1000) {
+            this.stopMove();
+          }
           //{ lat: this.state.startPos.lat + (latDelta * this.state.currentIdx), lng: this.state.startPos.lng + (lngDelta * this.state.currentIdx) };
           this.setState({ currentPos: nextPos });
         });
@@ -116,6 +122,7 @@ export class MapContainer extends Component {
         if(userType === 'driver') {
           this.getOrderAddress();
         this.getDirections();
+        this.startMove();
           console.log(this.state.destination)
         } else{
           this.props.history.push('/rest_dashboard')
@@ -136,9 +143,12 @@ export class MapContainer extends Component {
           })
           //test with: https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/posts.json
           .then(response => {
-              this.setState({destination: response.data[0].address})
-              console.log(response.data[0].address)
-              console.log(this.state.destination)
+              this.setState({first_destination_id: response.data[0].id})
+              this.setState({second_destination_id: response.data[1].id})
+              console.log(response.data)
+              console.log(response.data[0].id)
+              console.log(this.state.first_destination_id)
+              //console.log(response.data[1].id)  
               return true
           })
           .catch(error => {this.setState({ error, isLoading: false })
@@ -155,9 +165,9 @@ export class MapContainer extends Component {
         var userType = userTokenArr[0];
         var token = userTokenArr[1];
         Axios.post('http://127.0.0.1:8000/api/driver/r/route/', {
-            key: 123,
-            first_id: 33,
-            second_id: 34
+            key: token,
+            first_id: this.state.first_destination_id,
+            second_id: this.state.second_destination_id
           })
           .then(response => {
               this.setState({start: response.data.driver})
@@ -351,18 +361,36 @@ export class MapContainer extends Component {
     }
   };
 
+  updateDriver() {
+    if (this.state.userToken) {
+      var userTokenArr = this.state.userToken.split(":");
+      var token = userTokenArr[1];
+    Axios.post('http://127.0.0.1:8000/api/driver/r/update/', {
+      key: token,
+      driver_lat: this.state.currentPos[0],
+      driver_long: this.state.currentPos[1]
+    })
+    .then(res => {
+      console.log(res)
+    })
+    .catch(error => console.log(error));
+    }
+  }
+
   render() {
     // const triangleCoords = [
     //   {lat: 37.333911, lng: -121.881848},
     //   {lat: 37.333024, lng: -121.884756}
     // ];
-  //   let iconMarker = new window.google.maps.MarkerImage(
-  //     "https://lh3.googleusercontent.com/bECXZ2YW3j0yIEBVo92ECVqlnlbX9ldYNGrCe0Kr4VGPq-vJ9Xncwvl16uvosukVXPfV=w300",
-  //     null, /* size is determined at runtime */
-  //     null, /* origin is 0,0 */
-  //     null, /* anchor is bottom center of the scaled image */
-  //     new window.google.maps.Size(32, 32)
-  // );
+    let iconMarker = new window.google.maps.MarkerImage(
+      "https://lh3.googleusercontent.com/bECXZ2YW3j0yIEBVo92ECVqlnlbX9ldYNGrCe0Kr4VGPq-vJ9Xncwvl16uvosukVXPfV=w300",
+      null, /* size is determined at runtime */
+      null, /* origin is 0,0 */
+      null, /* anchor is bottom center of the scaled image */
+      new window.google.maps.Size(32, 32)
+    );
+
+    //let updateDriver;
 
     const buttons = this.state.buttons;
     let oneOrTwo;
@@ -414,12 +442,15 @@ export class MapContainer extends Component {
 
     return (
       <React.Fragment>
+        {/* <div>
+        {this.updateDriver()}
+        </div> */}
         <div style={divStyle}>
         <div>
             {oneOrTwo}
         </div>
         <div style={divStyle2} dangerouslySetInnerHTML={{__html: this.state.items}}></div>
-        <Button
+        {/* <Button
           type = 'submit'
 				    fullWidth
 				    variant="contained"
@@ -432,7 +463,7 @@ export class MapContainer extends Component {
 				    variant="contained"
 				    color="primary"
           onClick={this.stopMove}> Stop
-        </Button>
+        </Button> */}
         </div>
         <Map
           google={this.props.google}
@@ -455,7 +486,7 @@ export class MapContainer extends Component {
               strokeOpacity={0.8}
               strokeWeight={4}>
           </Polyline>
-          <Marker onClick={this.onMarkerClick} name={'driver'} position={this.state.currentPos}/>
+          <Marker icon={iconMarker} onClick={this.onMarkerClick} name={'driver'} position={this.state.currentPos}/>
           {/* <Marker onClick={this.onMarkerClick} name={'start: ' + this.state.start_destination_name} position={this.state.start_destination_object}/> */}
           <Marker onClick={this.onMarkerClick} name={'first destination: ' + this.state.first_destination_name} position={this.state.first_destination_object}/>
           <Marker onClick={this.onMarkerClick} name={'final destination: ' + this.state.final_destination_name} position={this.state.final_destination_object}/>
