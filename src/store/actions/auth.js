@@ -86,7 +86,7 @@ export const authLogin = (email, password, userType) => dispatch=>{
 	})
 } 
 
-export const authSignupRest = (email, password1, restaurant_name, lat, lng) => dispatch=>{
+export const authSignupRest = (email, password1, restaurant_name, lat, lng, addy) => dispatch=>{
 	//return dispatch => {
 	return new Promise(function(resolve, reject) {
 		dispatch(authStart())
@@ -96,7 +96,8 @@ export const authSignupRest = (email, password1, restaurant_name, lat, lng) => d
 			"restaurant_name": restaurant_name,
 			//"address": address,
 			"rest_lat": lat,
-			"rest_long": lng
+			"rest_long": lng,
+			"address": addy
 		})
 		.then(res => {
 			/*const token = res.data.key;
@@ -116,7 +117,7 @@ export const authSignupRest = (email, password1, restaurant_name, lat, lng) => d
 	})
 } 
 
-export const authSignupDriver = (email, password1, first_name, last_name, lat, lng) => dispatch=>{
+export const authSignupDriver = (email, password1, first_name, last_name, lat, lng, address) => dispatch=>{
 	//return dispatch => {
 	return new Promise(function(resolve, reject) {
 		dispatch(authStart())
@@ -126,7 +127,8 @@ export const authSignupDriver = (email, password1, first_name, last_name, lat, l
 			"first_name": first_name,
 			"last_name": last_name,
 			"driver_lat": lat,
-			"driver_long": lng
+			"driver_long": lng,
+			"address": address
 		})
 		.then(res => {
 			/*const token = res.data.key;

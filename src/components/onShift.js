@@ -27,7 +27,8 @@ class orderBody extends React.Component {
     this.state = {
       selected: window.localStorage.getItem("firstOrder") || "",
       selected2: window.localStorage.getItem("secondOrder") || "",
-      secondOrderList: JSON.parse(window.localStorage.getItem("secondOrderList")) || [],
+      secondOrderList:
+        JSON.parse(window.localStorage.getItem("secondOrderList")) || [],
       firstState: window.localStorage.getItem("firstState") || "true",
       secondState: window.localStorage.getItem("secondState") || "false",
       finalState: window.localStorage.getItem("finalState") || "false",
@@ -150,54 +151,55 @@ class orderBody extends React.Component {
     }
   };
 
-  handleSkip = (e) => {
-		e.preventDefault();
-		if(this.state.secondState == 'true') {
-			console.log(this.state.secondState);
-			if(this.state.userToken) {
-				window.localStorage.setItem('secondState', 'false');
-				window.localStorage.setItem('finalState', 'true');
-				this.setState({secondState: 'false'});
-				this.setState({finalState: 'true'});
-				this.setState({selected2: ''})
-			}
-		}
-	}
+  handleSkip = e => {
+    e.preventDefault();
+    if (this.state.secondState == "true") {
+      console.log(this.state.secondState);
+      if (this.state.userToken) {
+        window.localStorage.setItem("secondState", "false");
+        window.localStorage.setItem("finalState", "true");
+        this.setState({ secondState: "false" });
+        this.setState({ finalState: "true" });
+        this.setState({ selected2: "" });
+      }
+    }
+  };
 
-  handlePicked = (e) => {
-		e.preventDefault();
-		if(this.state.selected) {
-			console.log(this.state.selected);
-			if(this.state.userToken) {
-				var userTokenArr = this.state.userToken.split(':');
-		        var userType = userTokenArr[0];
-		        var token = userTokenArr[1];
-		        console.log(userType);
-		        var order_ids = []
-		        if(this.state.selected !== '') {
-		        	order_ids.push(this.state.selected)
-		        }
-		        if(this.state.selected2 !== '') {
-		        	order_ids.push(this.state.selected2)
-		        }
-		        if (order_ids.length !== 0) {
-		        	axios.post('http://127.0.0.1:8000/api/driver/r/confirmation/', {
-		            key: token,
-		            order_id: order_ids
-			         })
-					.then(res => {
-						console.log(res)
-						window.localStorage.setItem('finalState', 'false');
-						window.localStorage.setItem('lockState', 'true');
-						this.setState({finalState: 'false'});
-						this.setState({lockState: 'true'})
-						this.props.history.push('/driver_dashboard')
-					})
-					.catch(error => console.log(error));
-					}
-		        }
-		}
-	}
+  handlePicked = e => {
+    e.preventDefault();
+    if (this.state.selected) {
+      console.log(this.state.selected);
+      if (this.state.userToken) {
+        var userTokenArr = this.state.userToken.split(":");
+        var userType = userTokenArr[0];
+        var token = userTokenArr[1];
+        console.log(userType);
+        var order_ids = [];
+        if (this.state.selected !== "") {
+          order_ids.push(this.state.selected);
+        }
+        if (this.state.selected2 !== "") {
+          order_ids.push(this.state.selected2);
+        }
+        if (order_ids.length !== 0) {
+          axios
+            .post("http://127.0.0.1:8000/api/driver/r/confirmation/", {
+              key: token,
+              order_id: order_ids
+            })
+            .then(res => {
+              console.log(res);
+              window.localStorage.setItem("finalState", "false");
+              window.localStorage.setItem("lockState", "true");
+              this.setState({ finalState: "false" });
+              this.setState({ lockState: "true" });
+              this.props.history.push("/driver_dashboard");
+            })
+            .catch(error => console.log(error));
+        }
+      }
+    }
+  };
 
   render() {
     const firstState = this.state.firstState;
@@ -270,23 +272,13 @@ class orderBody extends React.Component {
     } else if (secondState === "true") {
       orderPage = (
         <div>
-          <CardActions>
-            <Button
-              variant="outlined"
-              color="secondary"
-              component={Link}
-              to="/driver_dashboard"
-            >
-              Back to Dashboard
-            </Button>
-          </CardActions>
           {/* Display orders */}
           <h1
             align="center"
             style={{
               fontFamily: "roboto",
-              fontSize: "48px",
-              fontWeight: "normal"
+              fontSize: "60px",
+              fontWeight: "300"
             }}
           >
             Orders from same place:{" "}
@@ -325,7 +317,7 @@ class orderBody extends React.Component {
               type="submit"
               fullWidth
               variant="contained"
-              color="primary"
+              color="secondary"
               onClick={this.handleSubmitSecond}
               style={{
                 maxWidth: "140px",
@@ -338,35 +330,27 @@ class orderBody extends React.Component {
               Confirm
             </Button>
             <Button
-				    type="submit"
-				    fullWidth
-				    variant="contained"
-				    color="primary"
-				    onClick={this.handleSkip}
-				    style={{
-		                maxWidth: "140px",
-		                maxHeight: "50px",
-		                minWidth: "140px",
-		                minHeight: "50px",
-		                fontSize: "24px"
-		              }}
-				 >
-				    Skip
-				</Button>
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              onClick={this.handleSkip}
+              style={{
+                maxWidth: "140px",
+                maxHeight: "50px",
+                minWidth: "140px",
+                minHeight: "50px",
+                fontSize: "24px"
+              }}
+            >
+              Skip
+            </Button>
           </CardActions>
         </div>
       );
     } else if (finalState === "true") {
       orderPage = (
         <div>
-          <Button
-            variant="outlined"
-            color="secondary"
-            component={Link}
-            to="/driver_dashboard"
-          >
-            Back to Dashboard
-          </Button>
           <CardActions style={{ justifyContent: "center", paddingTop: "45px" }}>
             <Button
               type="submit"

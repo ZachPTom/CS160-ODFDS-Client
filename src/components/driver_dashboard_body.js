@@ -63,9 +63,9 @@ const HelloTest = () => {
         </Button>
         <Button
           style={{
-            maxWidth: "320px",
+            maxWidth: "180px",
             maxHeight: "60px",
-            minWidth: "320px",
+            minWidth: "180px",
             minHeight: "60px",
             fontSize: "24px"
           }}

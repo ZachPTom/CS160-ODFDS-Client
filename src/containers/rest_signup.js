@@ -64,6 +64,7 @@ class RestSignup extends React.Component {
 			state: '',
 			lat: '',
 			lng: '',
+			addy: ''
      };
      this.handleChange = this.handleChange.bind(this);
      this.handleSubmit = this.handleSubmit.bind(this);
@@ -91,7 +92,8 @@ class RestSignup extends React.Component {
   handleSubmit = (e) => {
   		e.preventDefault();
 		console.log(this.state);
-		var location = this.state.street_address + ' ' + this.state.city + ' ' + this.state.state
+		var location = this.state.street + ' ' + this.state.city + ' ' + this.state.state
+		console.log(location);
 		Axios.get('https://maps.googleapis.com/maps/api/geocode/json',{
 			params:{
 				address:location,
@@ -103,23 +105,23 @@ class RestSignup extends React.Component {
 				lat: response.data.results[0].geometry.location.lat
 			})
 			this.setState({
-				lng: response.data.results[0].geometry.location.lng
+				lng: response.data.results[0].geometry.location.lng,
+				addy: location
 			})
-			console.log(this.state.lat)
-			console.log(this.state.lng)
+			console.log(this.state.addy);
   			this.props.onAuth(this.state.email, this.state.password1,
-  				this.state.restaurant_name, this.state.lat, this.state.lng)
+  				this.state.restaurant_name, this.state.lat, this.state.lng, this.state.addy)
   			.then( res =>{
   					console.log('res here');
   					console.log(res);
-			   		alert('Singup successful! You can login now')
+			   		alert('Signup successful! You can login now')
 			   		this.props.history.push('/login')
 			}).catch(error => {
-				alert('Please enter correct infromation')
+				alert('Please enter correct information')
 				console.log(error)
 			})
 		}).catch(error => {
-			alert('Please enter correct infromation')
+			alert('Please enter correct information')
 			console.log('error here')
 			console.log(error)
 		})
@@ -222,8 +224,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchProps = dispatch => {
 	return {
-		onAuth: (email, password1, restaurant_name, lat, lng) => 
-		dispatch(actions.authSignupRest(email, password1, restaurant_name, lat, lng))
+		onAuth: (email, password1, restaurant_name, lat, lng, addy) => 
+		dispatch(actions.authSignupRest(email, password1, restaurant_name, lat, lng, addy))
 	}
 }
 
