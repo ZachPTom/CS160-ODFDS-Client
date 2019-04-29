@@ -193,7 +193,7 @@ class orderBody extends React.Component {
               window.localStorage.setItem("lockState", "true");
               this.setState({ finalState: "false" });
               this.setState({ lockState: "true" });
-              this.props.history.push("/driver_dashboard");
+              this.props.history.push("/map2");
             })
             .catch(error => console.log(error));
         }
