@@ -68,7 +68,9 @@ class orderBody extends React.Component {
             });
             console.log(res);
           })
-          .catch(error => console.log(error));
+          .catch(error => {
+          	console.log(error)
+          });
       } else {
         this.props.history.push("/rest_dashboard");
       }
@@ -238,7 +240,7 @@ class orderBody extends React.Component {
                   >
                     <ListItemText
                       primary={
-                        "Price: " + d.total_price + "\tAddress: " + d.address
+                        "Price: " + d.total_price + "\tRestaurant Name: " + d.rest
                       }
                     />
                   </ListItem>
@@ -301,7 +303,7 @@ class orderBody extends React.Component {
                   >
                     <ListItemText
                       primary={
-                        "Price: " + d.total_price + "\tAddress: " + d.address
+                        "Price: " + d.total_price + "\tRestaurant Name: " + d.rest
                       }
                     />
                   </ListItem>
