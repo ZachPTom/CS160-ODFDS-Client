@@ -58,7 +58,7 @@ class OrderHistory extends React.Component {
           })
           .then(res => {
             console.log(res);
-            this.setState({orders: res.data});
+            this.setState({ orders: res.data });
           })
           .catch(error => console.log(error));
       } else {
@@ -71,32 +71,43 @@ class OrderHistory extends React.Component {
 
   render() {
     let orderPage = (
-        <div>
-            <h3
-              align="center"
-              style={{
-                justifyContent: "center",
-                fontFamily: "roboto",
-                fontSize: "24px",
-                fontWeight: "400"
-              }}
-            >
-              {" "}
-              Completed Orders
-            </h3>
-            <List>
-              {this.state.orders.map(d => (
-                <div>
-                  <ListItem data-id={d.id} key={d.id}>
-                    <ListItemText
-                      primary={
-                        "Price: " + d.total_price + "\tAddress: " + d.addressstr
-                      }
-                    />
-                  </ListItem>
-                </div>
-              ))}
-            </List>
+      <div>
+        <h1
+          align="center"
+          style={{
+            justifyContent: "center",
+            fontFamily: "roboto",
+            fontSize: "60px",
+            fontWeight: "300",
+            paddingTop: "40px"
+          }}
+        >
+          {" "}
+          Completed Orders
+        </h1>
+        <CardActions
+          style={{
+            justifyContent: "center",
+            marginLeft: "auto",
+            marginRight: "auto"
+          }}
+        >
+          <List>
+            <Divider />
+            {this.state.orders.map(d => (
+              <div>
+                <ListItem data-id={d.id} key={d.id}>
+                  <ListItemText
+                    primary={
+                      "Price: " + d.total_price + "\tAddress: " + d.addressstr
+                    }
+                  />
+                </ListItem>
+                <Divider />
+              </div>
+            ))}
+          </List>
+        </CardActions>
       </div>
     );
     return <div>{orderPage}</div>;
