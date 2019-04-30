@@ -23,7 +23,7 @@ const divStyle = {
   justifyContent: "center",
   fontfamily: "roboto",
   fontWeight: "300",
-  fontSize: "20px"
+  fontSize: "10px"
 };
 
 const divStyle2 = {
