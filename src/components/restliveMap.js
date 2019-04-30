@@ -103,7 +103,7 @@ export class RestLiveMap extends React.Component {
           var nextPos = this.state.driverCoords[this.state.increment]
         }
         this.setState({increment: this.state.increment + 1})
-        if (this.state.increment > 3000) {
+        if (this.state.increment > 100000) {
           this.stopMove();
         }
         //{ lat: this.state.startPos.lat + (latDelta * this.state.currentIdx), lng: this.state.startPos.lng + (lngDelta * this.state.currentIdx) };
@@ -140,7 +140,6 @@ export class RestLiveMap extends React.Component {
           //console.log(parseInt(this.props.match.params.order_id))
           this.getDirections();
         //this.updateDriver();
-          this.startMove();
           console.log(this.state.destination)
           console.log(this.state.coords + 'coords')
         } else{
@@ -253,7 +252,7 @@ export class RestLiveMap extends React.Component {
           //console.log(this.state.destination);
           // return coords;
           this.updateDriver();
-
+          this.startMove();
           
           if (this.state.second_destination_exists) {
           return Axios.get(`https://maps.googleapis.com/maps/api/directions/json?origin=${this.state.first_destination.toString()}
@@ -404,6 +403,32 @@ export class RestLiveMap extends React.Component {
     .then(res => {
       console.log(res)
       this.setState({currentPos: res.data.driver})
+      if (this.state.second_destination_exists) {
+        return Axios.get(`https://maps.googleapis.com/maps/api/directions/json?origin=${res.data.driver.toString()}
+                &destination=${this.state.final_destination.toString()}&waypoints=via:${this.state.first_destination.toString()}&key=AIzaSyDBmKH8_o35KRFWmcke2WO8xddSSvzT_-8`, 
+          { mode: "no-cors",
+            headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+            },
+            withCredentials: true,
+            credentials: 'same-origin',}
+          )
+          .then(response => {
+            //let dirs = response.data.routes[0].legs[0].steps[0].html_instructions;
+            var polyline = require('@mapbox/polyline');
+            let points = polyline.decode(response.data.routes[0].overview_polyline.points);
+            let coords = points.map((point) => {
+            return  {
+                lat: point[0],
+                lng: point[1]
+            }
+          });
+          this.setState({driverCoords: coords});
+          console.log('driverCoords: ' + this.state.driverCoords)
+          })
+          .catch(error => console.log(error));
+      } else {
       return Axios.get(`https://maps.googleapis.com/maps/api/directions/json?origin=${res.data.driver.toString()}
                 &destination=${this.state.final_destination.toString()}&key=AIzaSyDBmKH8_o35KRFWmcke2WO8xddSSvzT_-8`, 
           { mode: "no-cors",
@@ -428,7 +453,8 @@ export class RestLiveMap extends React.Component {
           console.log('driverCoords: ' + this.state.driverCoords)
           })
           .catch(error => console.log(error));
-    })
+        }
+      })
     .catch(error => console.log(error));
     }
   }

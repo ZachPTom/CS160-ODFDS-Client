@@ -45,6 +45,7 @@ export class MapContainer extends Component {
       selected: "",
       coords: [],
       coords2: [],
+      completed: false,
       increment: 0,
       start: [], //array parameters to pass to google api call
       restaurant: [],
@@ -95,14 +96,15 @@ export class MapContainer extends Component {
       this.setState({ currentIdx: 0 });
     else
       this.setState({ currentIdx: this.state.currentIdx + 1 }, function() {
-        if (this.state.increment >= this.state.coords.length - 1) {
+        if (this.state.completed || this.state.increment >= this.state.coords.length - 1) {
           this.setState({ increment: 0 });
+          this.setState({completed: true});
           var nextPos = this.state.coords2[this.state.increment];
         } else {
           var nextPos = this.state.coords[this.state.increment];
         }
         this.setState({ increment: this.state.increment + 1 });
-        if (this.state.increment > 3000) {
+        if (this.state.increment > 100000) {
           this.stopMove();
         }
         //{ lat: this.state.startPos.lat + (latDelta * this.state.currentIdx), lng: this.state.startPos.lng + (lngDelta * this.state.currentIdx) };
@@ -134,7 +136,6 @@ export class MapContainer extends Component {
       if (userType === "driver") {
         //this.getOrderAddress();
         this.getDirections();
-        this.startMove();
         console.log(this.state.destination);
       } else {
         this.props.history.push("/rest_dashboard");
@@ -267,7 +268,7 @@ export class MapContainer extends Component {
                 "second destination exists: " +
                   this.state.second_destination_exists
               );
-
+              this.startMove();
               if (this.state.second_destination_exists) {
                 return Axios.get(
                   `https://maps.googleapis.com/maps/api/directions/json?origin=${this.state.first_destination.toString()}
